@@ -1,6 +1,6 @@
 
 CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall
+CFLAGS		=	#-Werror -Wextra -Wall
 
 NAME 		=	philo
 
@@ -10,13 +10,12 @@ OBJ_DIR		=	obj/
 LIB_DIR		=	libft/
 
 SRC_NAME	=	philo
-LIB_NAME	=	libft.a
-INC_NAME	=	libft.h
+INC_NAME	=	philo.h
 
 SRC_FILES	=	$(addsuffix .c, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 LIB_FILE	=	$(addprefix $(LIB_DIR), $(LIB_NAME))
 OBJ_FILES	=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
-INC_FILES	=	$(addprefix $(LIB_DIR), $(INC_NAME))
+INC_FILES	=	$(addprefix $(INC_DIR), $(INC_NAME))
 
 all : $(NAME)
 

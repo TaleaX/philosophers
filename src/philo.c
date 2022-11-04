@@ -1,19 +1,24 @@
 #include "../inc/philo.h"
 
-// void    *routine(t_philo_data philo_data)
-// {
-//     while (1)
-//     {
-//         if (still_alive())
-//         {
+void    *rountine(void *content)
+{
+    t_philo_data *philo_data = content;
 
-//         }
-//         else
-//         {
-//             printf()
-//         }
-//     }
-// }
+
+    printf("test begin philo num %d\n", philo_data.num);
+    usleep(300000);
+    printf("end \n");
+    return NULL;
+}
+
+pthread_t   *init_philos(int num)
+{
+    pthread_t   *philos;
+
+    philos = malloc(sizeof(pthread_t) * num);
+    return (philos);
+
+}
 
 t_bool *create_forks(int num)
 {
@@ -59,30 +64,38 @@ void    init_philo_data(t_philo_data *philo_data, char **argv)
     philo_data->time_arr = create_time_arr(atoi(argv[1]));
 }
 
-int main(int argc, char *argv[])
+
+int main(int argc, char **argv)
 {
-    //pthread_t       philosopher[atoi(argv[0])];
+    int num_philos = atoi(argv[1]);
     t_philo_data    philo_data;
-    //t_timeval       time;
+    pthread_t       *philos;
     int             i;
 
-    if (argc){printf("bam");};
+    philos = init_philos(num_philos);
     init_philo_data(&philo_data, argv);
-    //philo_data.time_arr = create_time_arr(atoi(argv[1]));
+    (void)argc;
     i = 0;
-    printf("atgv %s\n", argv[1]);
     while (i < atoi(argv[1]))
     {
         //gettimeofday(&time, NULL);
         printf("current time %d = %ld\n", i, philo_data.time_arr[i].tv_usec);
         i++;
     }
-    // while (i < philo_data.num)
-    // {
-    //     philo_data.num = i;
-    //     pthread_create(&philosopher[i], NULL, &routine, &philo_data);
-    //     i++;
-    // }
-    // pthread_join(&philosopher, NULL);
-    return (0);
+    i = 0;
+    while (i < num_philos)
+    {
+        philo_data.num = i;
+        pthread_create(&philos[i], NULL, &rountine, &philo_data);
+        i++;
+
+    }
+    i = 0;
+    while (i < num_philos)
+    {
+        pthread_join(philos[i], NULL);
+        i++;
+    }
+    printf("well\n");
+    return 0;
 }
