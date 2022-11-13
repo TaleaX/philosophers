@@ -9,7 +9,7 @@ SRC_DIR		=	src/
 OBJ_DIR		=	obj/
 LIB_DIR		=	libft/
 
-SRC_NAME	=	philo
+SRC_NAME	=	philo utils init
 INC_NAME	=	philo.h
 
 SRC_FILES	=	$(addsuffix .c, $(addprefix $(SRC_DIR), $(SRC_NAME)))

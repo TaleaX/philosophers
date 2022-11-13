@@ -9,15 +9,27 @@
 
 #define TRUE 1
 #define FALSE 0
+#define EAT_STR "eating"
+#define SLEEP_STR "sleeping"
+#define THINK_STR "thinking"
 
 typedef struct timeval t_timeval;
 typedef int t_bool;
+
+
+typedef enum activity {
+    EAT,
+    SLEEP,
+    THINK
+
+} t_activity;
 
 typedef struct s_philo_data {
     int         num;
     int         total_num_philos;
     int         num_forks;
-    t_bool       *forks_b;
+    t_bool      *forks_b;
+    pthread_mutex_t mutex_for_lock;
     pthread_mutex_t *forks;
     int         time_to_sleep;
     int         time_to_die;
@@ -25,5 +37,15 @@ typedef struct s_philo_data {
     t_timeval  *time_arr;
     t_timeval  time_death;
 }   t_philo_data;
+
+//utils
+t_bool  is_dead(t_philo_data philo_data);
+void    unlock(t_bool *mutex);
+void    lock(t_bool *mutex, t_philo_data philo_data);
+void    do_activity(t_philo_data philo_data, t_activity activity, char *activity_str);
+
+//init
+void    init_philo_data(t_philo_data *philo_data, char **argv);
+t_timeval   *create_time_arr(int num);
 
 #endif
