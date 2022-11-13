@@ -15,12 +15,15 @@ typedef int t_bool;
 
 typedef struct s_philo_data {
     int         num;
+    int         total_num_philos;
     int         num_forks;
-    t_bool      *forks;
+    t_bool       *forks_b;
+    pthread_mutex_t *forks;
     int         time_to_sleep;
     int         time_to_die;
     int         time_to_eat;
     t_timeval  *time_arr;
+    t_timeval  time_death;
 }   t_philo_data;
 
 #endif
