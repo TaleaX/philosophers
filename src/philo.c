@@ -6,27 +6,30 @@ t_bool forks_b[2] = {FALSE, FALSE};
 void    *routine(void *content)
 {
 
-    t_philo_data philo_data = *(t_philo_data *)content;
+    t_philo_data *philo_data = (t_philo_data *)content;
     t_timeval   time_death;
-    int eat;
-    int i = 0;
-    philo_data.time_arr = create_time_arr(philo_data.total_num_philos);
+    static int  num = -1;
+
+    pthread_mutex_lock(&philo_data->mutex_for_lock);
+    num++;
+    gettimeofday(philo_data->time_arr + num, NULL);
+    pthread_mutex_unlock(&philo_data->mutex_for_lock);
     while (1)
     {
-        if (is_dead(philo_data))
+        if (is_dead(philo_data, num))
         {
-            printf("Philo %d died: Timestap m %d\n", philo_data.num, philo_data.time_death.tv_usec);
+            printf("Philo %d died: Timestap m %d\n", num, philo_data->time_death.tv_usec);
             pthread_exit(NULL);
         }
-        printf("philo num %d is thinking\n", philo_data.num);
-        lock(&philo_data.forks_b[philo_data.num], philo_data);
-        lock(&philo_data.forks_b[(philo_data.num + 1) % philo_data.total_num_philos], philo_data);
-        printf("philo num %d finished thinking\n", philo_data.num);
-        do_activity(philo_data, EAT, EAT_STR);
-        gettimeofday(philo_data.time_arr + philo_data.num, NULL);
-        unlock(&philo_data.forks_b[philo_data.num]);
-        unlock(&philo_data.forks_b[(philo_data.num + 1) % philo_data.total_num_philos]);
-        do_activity(philo_data, SLEEP, SLEEP_STR);
+        printf("philo num %d is thinking\n", num);
+        lock(&philo_data->forks_b[num], philo_data, num);
+        lock(&philo_data->forks_b[(num + 1) % philo_data->total_num_philos], philo_data, num);
+        printf("philo num %d finished thinking\n", num);
+        do_activity(*philo_data, EAT, EAT_STR, num);
+        gettimeofday(philo_data->time_arr + num, NULL);
+        unlock(&philo_data->forks_b[num]);
+        unlock(&philo_data->forks_b[(num + 1) % philo_data->total_num_philos]);
+        do_activity(*philo_data, SLEEP, SLEEP_STR, num);
     }
     return NULL;
 }
@@ -51,6 +54,7 @@ int main(int argc, char **argv)
     {
         philos = init_philos(num_philos);
         init_philo_data(&philo_data, argv);
+        philo_data.time_arr = create_time_arr(philo_data.total_num_philos);
         i = 0;
         while (i < num_philos)
         {

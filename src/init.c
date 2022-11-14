@@ -8,12 +8,12 @@ t_timeval   *create_time_arr(int num)
     times = malloc(sizeof(t_timeval) * (num));
     if (!times)
         return (NULL);
-    i = 0;
-    while (i < num)
-    {
-        gettimeofday(times + i, NULL);
-        i++;
-    }
+    // i = 0;
+    // while (i < num)
+    // {
+    //     gettimeofday(times + i, NULL);
+    //     i++;
+    // }
     return (times);
 }
 
