@@ -6,30 +6,29 @@ t_bool forks_b[2] = {FALSE, FALSE};
 void    *routine(void *content)
 {
 
-    t_philo_data *philo_data = (t_philo_data *)content;
+    t_philo_data philo_data = *(t_philo_data *)content;
+	int	num = philo_data.num;
     t_timeval   time_death;
-    static int  num = -1;
 
-    pthread_mutex_lock(&philo_data->mutex_for_lock);
-    num++;
-    gettimeofday(philo_data->time_arr + num, NULL);
-    pthread_mutex_unlock(&philo_data->mutex_for_lock);
+    pthread_mutex_lock(&philo_data.mutex_for_lock);
+    gettimeofday(philo_data.time_arr + philo_data.num, NULL);
+    pthread_mutex_unlock(&philo_data.mutex_for_lock);
     while (1)
     {
-        if (is_dead(philo_data, num))
+        if (is_dead(&philo_data, num))
         {
-            printf("Philo %d died: Timestap m %d\n", num, philo_data->time_death.tv_usec);
+            printf("Philo %d died: Timestap m %d\n", num, philo_data.time_death.tv_usec);
             pthread_exit(NULL);
         }
         printf("philo num %d is thinking\n", num);
-        lock(&philo_data->forks_b[num], philo_data, num);
-        lock(&philo_data->forks_b[(num + 1) % philo_data->total_num_philos], philo_data, num);
+        lock(&philo_data.forks_b[num], &philo_data, num);
+        lock(&philo_data.forks_b[(num + 1) % philo_data.total_num_philos], &philo_data, num);
         printf("philo num %d finished thinking\n", num);
-        do_activity(*philo_data, EAT, EAT_STR, num);
-        gettimeofday(philo_data->time_arr + num, NULL);
-        unlock(&philo_data->forks_b[num]);
-        unlock(&philo_data->forks_b[(num + 1) % philo_data->total_num_philos]);
-        do_activity(*philo_data, SLEEP, SLEEP_STR, num);
+        do_activity(philo_data, EAT, EAT_STR, num);
+        gettimeofday(philo_data.time_arr + num, NULL);
+        unlock(&philo_data.forks_b[num]);
+        unlock(&philo_data.forks_b[(num + 1) % philo_data.total_num_philos]);
+        do_activity(philo_data, SLEEP, SLEEP_STR, num);
     }
     return NULL;
 }
@@ -49,7 +48,8 @@ int main(int argc, char **argv)
     t_philo_data    philo_data;
     pthread_t       *philos;
     int             i;
-    
+	t_timeval   current_time;
+		
     if (argc >= 5)
     {
         philos = init_philos(num_philos);

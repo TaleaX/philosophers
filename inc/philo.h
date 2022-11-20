@@ -48,4 +48,7 @@ void    do_activity(t_philo_data philo_data, t_activity activity, char *activity
 void    init_philo_data(t_philo_data *philo_data, char **argv);
 t_timeval   *create_time_arr(int num);
 
+//utils
+double	get_ms(t_timeval time);
+
 #endif
