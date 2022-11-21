@@ -8,12 +8,12 @@ t_timeval   *create_time_arr(int num)
     times = malloc(sizeof(t_timeval) * (num));
     if (!times)
         return (NULL);
-    // i = 0;
-    // while (i < num)
-    // {
-    //     gettimeofday(times + i, NULL);
-    //     i++;
-    // }
+    i = 0;
+    while (i < num)
+    {
+        gettimeofday(times + i, NULL);
+        i++;
+    }
     return (times);
 }
 
@@ -61,5 +61,6 @@ void    init_philo_data(t_philo_data *philo_data, char **argv)
     philo_data->time_to_die = atoi(argv[2]);
     philo_data->time_to_eat = atoi(argv[3]);
     philo_data->time_to_sleep = atoi(argv[4]);
+	philo_data->time_arr = create_time_arr(philo_data->total_num_philos);
     pthread_mutex_init(&philo_data->mutex_for_lock, NULL);
 }

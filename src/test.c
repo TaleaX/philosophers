@@ -31,9 +31,6 @@ void    *rountine(void *content)
             usleep(philo_data.time_to_sleep * 1000);
         }
     }
-    // printf("test begin philo num %d\n", philo_data.num);
-    // usleep(300000);
-    // printf("end %d\n", philo_data.num);
     return NULL;
 }
 
