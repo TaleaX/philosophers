@@ -12,7 +12,7 @@ void    *routine(void *content)
     int i = 0;
     while (1)
     {
-        if (is_dead(philo_data))
+        if (is_dead(&philo_data))
         {
             printf("Philo %d died: Timestap m %d\n", philo_data.num, philo_data.time_death.tv_usec);
             pthread_exit(NULL);

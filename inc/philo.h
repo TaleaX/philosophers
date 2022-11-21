@@ -39,10 +39,11 @@ typedef struct s_philo_data {
 }   t_philo_data;
 
 //utils
-t_bool  is_dead(t_philo_data philo_data);
+t_bool  is_dead(t_philo_data *philo_data);
 void    unlock(t_bool *mutex);
 void    lock(t_bool *mutex, t_philo_data philo_data);
 void    do_activity(t_philo_data philo_data, t_activity activity, char *activity_str);
+double	get_ms(t_timeval time);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv);

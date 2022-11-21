@@ -3,7 +3,6 @@
 t_bool  is_dead(t_philo_data *philo_data)
 {
     t_timeval   current_time;
-    //struct timeval   time_last_meal = {0,0};
 	double	time_last_meal;
 	double	curtime;
 
@@ -12,8 +11,8 @@ t_bool  is_dead(t_philo_data *philo_data)
 	gettimeofday(&current_time, NULL);
 	curtime = get_ms(current_time);
     pthread_mutex_unlock(&philo_data->mutex_for_lock);
-	//printf("in here philo_data->time_to_die  =  %d > %f \t num %d current %f last meal %f\n", philo_data->time_to_die, curtime - time_last_meal, num, curtime, time_last_meal);
-    if (curtime - time_last_meal > (philo_data->time_to_die / 1000))
+	printf("in here philo_data->time_to_die  =  %f > %f \t current %f last meal %f\n", (double) philo_data->time_to_die / 1000, curtime - time_last_meal, curtime, time_last_meal);
+    if (curtime - time_last_meal > ((double) philo_data->time_to_die / 1000))
     {
         pthread_mutex_lock(&philo_data->mutex_for_lock);
         philo_data->time_death = current_time;
@@ -40,26 +39,6 @@ void    unlock(t_bool *mutex)
 {
     *mutex = FALSE;
 }
-
-// t_bool  is_dead(t_philo_data philo_data)
-// {
-//     t_timeval   current_time;
-//     t_timeval   time_last_meal;
-
-//     pthread_mutex_lock(&philo_data.mutex_for_lock);
-//     time_last_meal = philo_data.time_arr[philo_data.num];
-//     gettimeofday(&current_time, NULL);
-//     pthread_mutex_unlock(&philo_data.mutex_for_lock);
-//     //printf("current %d last meal %d diff %d\n", current_time.tv_usec, time_last_meal.tv_usec, current_time.tv_usec - time_last_meal.tv_usec);
-//     if (current_time.tv_usec - time_last_meal.tv_usec > philo_data.time_to_die * 1000)
-//     {
-//         pthread_mutex_lock(&philo_data.mutex_for_lock);
-//         philo_data.time_death = current_time;
-//         pthread_mutex_unlock(&philo_data.mutex_for_lock);
-//         return (TRUE);
-//     }
-//     return (FALSE);
-// }
 
 double	get_ms(t_timeval time)
 {
