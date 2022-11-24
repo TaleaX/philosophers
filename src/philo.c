@@ -7,19 +7,19 @@ void    *routine(void *content)
 {
 
     t_philo_data philo_data = *(t_philo_data *)content;
-    t_timeval   time_death;
-    int eat;
-    int i = 0;
+
     while (1)
     {
-        if (is_dead(&philo_data))
+        if (is_dead(&philo_data, philo_data.num))
         {
-            printf("Philo %d died: Timestap m %d\n", philo_data.num, philo_data.time_death.tv_usec);
+            printf("Philo %d died: Timestap m %ld\n", philo_data.num, philo_data.time_death.tv_usec);
+            sleep(5);
+            exit(0);
             pthread_exit(NULL);
         }
         printf("philo num %d is thinking\n", philo_data.num);
-        lock(&philo_data.forks_b[philo_data.num], philo_data);
-        lock(&philo_data.forks_b[(philo_data.num + 1) % philo_data.total_num_philos], philo_data);
+        lock(&philo_data.forks_b[philo_data.num], &philo_data, philo_data.num);
+        lock(&philo_data.forks_b[(philo_data.num + 1) % philo_data.total_num_philos], &philo_data, philo_data.num);
         printf("philo num %d finished thinking\n", philo_data.num);
         do_activity(philo_data, EAT, EAT_STR);
         gettimeofday(philo_data.time_arr + philo_data.num, NULL);

@@ -27,6 +27,7 @@ typedef enum activity {
 typedef struct s_philo_data {
     int         num;
     int         total_num_philos;
+    int         min_rounds;
     int         num_forks;
     t_bool      *forks_b;
     pthread_mutex_t mutex_for_lock;
@@ -39,9 +40,9 @@ typedef struct s_philo_data {
 }   t_philo_data;
 
 //utils
-t_bool  is_dead(t_philo_data *philo_data);
+t_bool  is_dead(t_philo_data *philo_data, int num);
 void    unlock(t_bool *mutex);
-void    lock(t_bool *mutex, t_philo_data philo_data);
+void    lock(t_bool *mutex, t_philo_data *philo_data, int num);
 void    do_activity(t_philo_data philo_data, t_activity activity, char *activity_str);
 double	get_ms(t_timeval time);
 
