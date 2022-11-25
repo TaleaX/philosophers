@@ -3,8 +3,9 @@
 void    *routine(void *content)
 {
 
-    t_philo_data philo_data = *(t_philo_data *)content;
+    t_philo_data philo_data;
 
+    philo_data = *(t_philo_data *)content;
     if (philo_data.total_num_philos > 1)
     {
         while (1)
@@ -26,12 +27,13 @@ void    *routine(void *content)
 
 void	*die(void *content)
 {
-	t_philo_data philo_data = *(t_philo_data *)content;
-    t_timeval   current_time;
-	double      time_last_meal;
-	double      curtime;
-    int         i;
+	t_philo_data    philo_data;
+    t_timeval       current_time;
+	double          time_last_meal;
+	double          curtime;
+    int             i;
 
+    philo_data = *(t_philo_data *)content;
 	while (1)
 	{
         pthread_mutex_lock(&philo_data.mutex_for_lock);
