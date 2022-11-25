@@ -51,8 +51,16 @@ static t_bool *create_forks_b(int num)
     return (forks);
 }
 
+pthread_t   *init_philos(int num)
+{
+    pthread_t   *philos;
 
-void    init_philo_data(t_philo_data *philo_data, char **argv)
+    philos = malloc(sizeof(pthread_t) * num);
+    return (philos);
+
+}
+
+void    init_philo_data(t_philo_data *philo_data, char **argv, char argc)
 {
     philo_data->num_forks = atoi(argv[1]);
     philo_data->total_num_philos = atoi(argv[1]);
@@ -63,4 +71,7 @@ void    init_philo_data(t_philo_data *philo_data, char **argv)
     philo_data->time_to_sleep = atoi(argv[4]);
 	philo_data->time_arr = create_time_arr(philo_data->total_num_philos);
     pthread_mutex_init(&philo_data->mutex_for_lock, NULL);
+	philo_data->min_rounds = -1;
+	if (argc > 5)
+		philo_data->min_rounds = atoi(argv[5]) * philo_data->total_num_philos;
 }
