@@ -30,7 +30,7 @@ typedef struct s_philo_data {
     int         min_rounds;
     int         *rounds;
     int         num_forks;
-    pthread_mutex_t mutex_for_lock;
+    pthread_mutex_t *mutex_for_lock;
     pthread_mutex_t *forks;
     int         time_to_sleep;
     int         time_to_die;
@@ -43,7 +43,7 @@ typedef struct s_philo_data {
 t_bool  is_dead(t_philo_data *philo_data, int num);
 void    unlock(t_bool *mutex);
 void    lock(t_bool *mutex, t_philo_data *philo_data, int num);
-void    do_activity(t_philo_data philo_data, t_activity activity, char *activity_str);
+void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
 double	get_ms(t_timeval time);
 void    my_usleep(double wait_usec);
 
@@ -51,5 +51,12 @@ void    my_usleep(double wait_usec);
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);
 t_timeval   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
+
+//libft
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putnbr_fd(int n, int fd);
+
+//printf
+int	ft_printf(const char *str, ...);
 
 #endif

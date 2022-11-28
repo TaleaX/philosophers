@@ -38,14 +38,28 @@ double	get_ms(t_timeval time)
 
 
 
-void    do_activity(t_philo_data philo_data, t_activity activity, char *activity_str)
+void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str)
 {
-    printf("philo num %d starts %s\n", philo_data.num, activity_str);
+	pthread_mutex_lock(philo_data->mutex_for_lock);
+    ft_printf("philo num %d starts %s\n", philo_data->num, activity_str);
+	// ft_putstr_fd("Philo num ", 1);
+	// ft_putnbr_fd(philo_data->num, 1);
+	// ft_putstr_fd(" starts ", 1);
+	// ft_putstr_fd(activity_str, 1);
+	// ft_putstr_fd("\n", 1);
+	pthread_mutex_unlock(philo_data->mutex_for_lock);
     if (activity == EAT)
-        usleep(philo_data.time_to_eat * 1000);
+        usleep(philo_data->time_to_eat * 1000);
     else if (activity == SLEEP)
-        usleep(philo_data.time_to_sleep * 1000);
-    printf("philo num %d finished %s\n", philo_data.num, activity_str);
+        usleep(philo_data->time_to_sleep * 1000);
+	pthread_mutex_lock(philo_data->mutex_for_lock);
+	// ft_putstr_fd("Philo num ", 1);
+	// ft_putnbr_fd(philo_data->num, 1);
+	// ft_putstr_fd(" finished ", 1);
+	// ft_putstr_fd(activity_str, 1);
+	// ft_putstr_fd("\n", 1);
+    ft_printf("philo num %d finished %s\n", philo_data->num, activity_str);
+	pthread_mutex_unlock(philo_data->mutex_for_lock);
 }
 
 void    my_usleep(double wait_usec)
