@@ -1,5 +1,39 @@
 #include "../inc/philo.h"
 
+pthread_mutex_t mutex_think;
+pthread_mutex_t mutex;
+pthread_mutex_t mutex_eat;
+pthread_mutex_t mutex_sleep;
+
+void    putstr_arg(char *str, int arg, char c, pthread_mutex_t *mutex)
+{
+    pthread_mutex_lock(mutex);
+    while (*str)
+    {
+        if (*str == '%' && *(str + 1) != '%')
+        {
+            if (!c)
+            {
+                while (1)
+                {
+                    c = (arg % 10) + '0';
+                    write(1, &c, 1);
+                    arg /= 10;
+                    if (!arg)
+                        break ;
+                }
+            }
+            else
+                write(1, &c, 1);
+            str++;
+            continue ;
+        }
+        write(1, str, 1);
+        str++;
+    }
+    pthread_mutex_unlock(mutex);
+}
+
 void    *routine(void *content)
 {
 
@@ -10,24 +44,30 @@ void    *routine(void *content)
     {
         while (1)
         {
-			pthread_mutex_lock(philo_data.mutex_for_lock);
+			// pthread_mutex_lock(&mutex_think);
 			// ft_putstr_fd("Starts Thinking: Philo ", 1);
 			// ft_putnbr_fd(philo_data.num, 1);
 			// ft_putstr_fd("\n", 1);
-			ft_printf("Philo %d starts thinking \n", philo_data.num);
-			pthread_mutex_unlock(philo_data.mutex_for_lock);
+            putstr_arg("Philo % starts thinking \n", philo_data.num, '\0', philo_data.mutex);
+			//ft_printf("Philo %d starts thinking \n", philo_data.num);
+			// pthread_mutex_unlock(&mutex_think);
             pthread_mutex_lock(&philo_data.forks[philo_data.num]);
             pthread_mutex_lock(&philo_data.forks[(philo_data.num + 1) % philo_data.total_num_philos]);
-			ft_printf("Philo %d finished thinking \n", philo_data.num);
+            putstr_arg("Philo % finishes thinking \n", philo_data.num, '\0', philo_data.mutex);
+            // usleep(100);
             // ft_putstr_fd("Finishes Thinking: Philo ", 1);
 			// ft_putnbr_fd(philo_data.num, 1);
 			// ft_putstr_fd("\n", 1);
             gettimeofday(philo_data.time_arr + philo_data.num, NULL);
+            // pthread_mutex_lock(&mutex_eat);
             do_activity(&philo_data, EAT, EAT_STR);
+            // pthread_mutex_unlock(&mutex_eat);
             (*philo_data.rounds)++;
             pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
             pthread_mutex_unlock(&philo_data.forks[(philo_data.num + 1) % philo_data.total_num_philos]);
+            // pthread_mutex_lock(&mutex_sleep);
             do_activity(&philo_data, SLEEP, SLEEP_STR);
+            // pthread_mutex_unlock(&mutex_sleep);
         }
     }
     return (NULL);
@@ -88,9 +128,13 @@ int main(int argc, char **argv)
     
     if (argc >= 5 && atoi(argv[1]) > 0)
     {
+        pthread_mutex_init(&mutex_think, NULL);
+        pthread_mutex_init(&mutex_sleep, NULL);
+        pthread_mutex_init(&mutex_eat, NULL);
+        pthread_mutex_init(&mutex, NULL);
 		philos = init_philos(atoi(argv[1]));
         init_philo_data(&philo_data, argv, argc);
-		pthread_create(&check_death, NULL, &die, (void *)&philo_data);
+		//pthread_create(&check_death, NULL, &die, (void *)&philo_data);
         i = 0;
         while (i < philo_data.total_num_philos)
         {
@@ -103,10 +147,10 @@ int main(int argc, char **argv)
         i = 0;
         while (i < philo_data.total_num_philos)
         {
-            pthread_detach(philos[i]);
+            pthread_join(philos[i], NULL);
             i++;
         }
-		pthread_join(check_death, NULL);
+		//pthread_join(check_death, NULL);
         free(philo_data.forks);
         free(philo_data.time_arr);
         free(philo_data.rounds);

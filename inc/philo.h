@@ -30,7 +30,8 @@ typedef struct s_philo_data {
     int         min_rounds;
     int         *rounds;
     int         num_forks;
-    pthread_mutex_t *mutex_for_lock;
+    pthread_mutex_t *mutex;
+    pthread_mutex_t *mutex_activity;
     pthread_mutex_t *forks;
     int         time_to_sleep;
     int         time_to_die;
@@ -58,5 +59,7 @@ void	ft_putnbr_fd(int n, int fd);
 
 //printf
 int	ft_printf(const char *str, ...);
+
+void    putstr_arg(char *str, int arg, char c, pthread_mutex_t *mutex);
 
 #endif

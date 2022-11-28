@@ -70,8 +70,10 @@ void    init_philo_data(t_philo_data *philo_data, char **argv, char argc)
     philo_data->time_to_eat = atoi(argv[3]);
     philo_data->time_to_sleep = atoi(argv[4]);
 	philo_data->time_arr = create_time_arr(philo_data->total_num_philos);
-	philo_data->mutex_for_lock = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(philo_data->mutex_for_lock, NULL);
+	philo_data->mutex = malloc(sizeof(pthread_mutex_t));
+    philo_data->mutex_activity = malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(philo_data->mutex, NULL);
+    pthread_mutex_init(philo_data->mutex_activity, NULL);
 	philo_data->min_rounds = -1;
     philo_data->rounds = malloc(sizeof(int));
     *philo_data->rounds = 0;
