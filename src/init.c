@@ -34,22 +34,22 @@ static pthread_mutex_t *create_forks(int num)
     return (forks);
 }
 
-static t_bool *create_forks_b(int num)
-{
-    t_bool *forks;
-    int i;
+// static t_bool *create_forks_b(int num)
+// {
+//     t_bool *forks;
+//     int i;
 
-    forks = malloc(sizeof(t_bool) * (num));
-    if (!forks)
-        return (NULL);
-    i = 0;
-    while (i < num)
-    {
-        forks[i] = FALSE;
-        i++;
-    }
-    return (forks);
-}
+//     forks = malloc(sizeof(t_bool) * (num));
+//     if (!forks)
+//         return (NULL);
+//     i = 0;
+//     while (i < num)
+//     {
+//         forks[i] = FALSE;
+//         i++;
+//     }
+//     return (forks);
+// }
 
 pthread_t   *init_philos(int num)
 {

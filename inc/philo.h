@@ -47,6 +47,7 @@ void    lock(t_bool *mutex, t_philo_data *philo_data, int num);
 void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
 double	get_ms(t_timeval time);
 void    my_usleep(double wait_usec);
+void	output(t_philo_data *philo_data, char *activity_str);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);
@@ -60,6 +61,6 @@ void	ft_putnbr_fd(int n, int fd);
 //printf
 int	ft_printf(const char *str, ...);
 
-void    putstr_arg(char *str, int arg, char c, pthread_mutex_t *mutex);
+void    putstr_arg(char *str, int arg, char c);
 
 #endif

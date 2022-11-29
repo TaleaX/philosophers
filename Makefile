@@ -1,6 +1,6 @@
 
 CC			=	gcc
-CFLAGS		=	#-Werror -Wextra -Wall
+CFLAGS		=	-Werror -Wextra -Wall -fsanitize=thread
 
 NAME 		=	philo
 

@@ -1,13 +1,7 @@
 #include "../inc/philo.h"
 
-pthread_mutex_t mutex_think;
-pthread_mutex_t mutex;
-pthread_mutex_t mutex_eat;
-pthread_mutex_t mutex_sleep;
-
-void    putstr_arg(char *str, int arg, char c, pthread_mutex_t *mutex)
+void    putstr_arg(char *str, int arg, char c)
 {
-    pthread_mutex_lock(mutex);
     while (*str)
     {
         if (*str == '%' && *(str + 1) != '%')
@@ -31,43 +25,44 @@ void    putstr_arg(char *str, int arg, char c, pthread_mutex_t *mutex)
         write(1, str, 1);
         str++;
     }
-    pthread_mutex_unlock(mutex);
 }
 
 void    *routine(void *content)
 {
 
     t_philo_data philo_data;
+	int	last_index;
 
     philo_data = *(t_philo_data *)content;
     if (philo_data.total_num_philos > 1)
     {
         while (1)
         {
-			// pthread_mutex_lock(&mutex_think);
-			// ft_putstr_fd("Starts Thinking: Philo ", 1);
-			// ft_putnbr_fd(philo_data.num, 1);
-			// ft_putstr_fd("\n", 1);
-            putstr_arg("Philo % starts thinking \n", philo_data.num, '\0', philo_data.mutex);
-			//ft_printf("Philo %d starts thinking \n", philo_data.num);
-			// pthread_mutex_unlock(&mutex_think);
+			output(&philo_data, THINK_STR);
+
+			pthread_mutex_lock(philo_data.mutex);
+			last_index = (philo_data.num + 1) % philo_data.total_num_philos;
+			pthread_mutex_unlock(philo_data.mutex);
+
             pthread_mutex_lock(&philo_data.forks[philo_data.num]);
-            pthread_mutex_lock(&philo_data.forks[(philo_data.num + 1) % philo_data.total_num_philos]);
-            putstr_arg("Philo % finishes thinking \n", philo_data.num, '\0', philo_data.mutex);
-            // usleep(100);
-            // ft_putstr_fd("Finishes Thinking: Philo ", 1);
-			// ft_putnbr_fd(philo_data.num, 1);
-			// ft_putstr_fd("\n", 1);
+            pthread_mutex_lock(&philo_data.forks[last_index]);
+
+			pthread_mutex_lock(philo_data.mutex);
             gettimeofday(philo_data.time_arr + philo_data.num, NULL);
-            // pthread_mutex_lock(&mutex_eat);
-            do_activity(&philo_data, EAT, EAT_STR);
-            // pthread_mutex_unlock(&mutex_eat);
+			pthread_mutex_unlock(philo_data.mutex);
+
+            output(&philo_data, EAT_STR);
+			my_usleep(philo_data.time_to_eat * 1000);
+
+			pthread_mutex_lock(philo_data.mutex);
             (*philo_data.rounds)++;
+			pthread_mutex_unlock(philo_data.mutex);
+
             pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
-            pthread_mutex_unlock(&philo_data.forks[(philo_data.num + 1) % philo_data.total_num_philos]);
-            // pthread_mutex_lock(&mutex_sleep);
-            do_activity(&philo_data, SLEEP, SLEEP_STR);
-            // pthread_mutex_unlock(&mutex_sleep);
+            pthread_mutex_unlock(&philo_data.forks[last_index]);
+
+            output(&philo_data, SLEEP_STR);
+			my_usleep(philo_data.time_to_sleep * 1000);
         }
     }
     return (NULL);
@@ -80,24 +75,28 @@ void	*die(void *content)
 	double          time_last_meal;
 	double          curtime;
     int             i;
+	// int				num;
 
     philo_data = *(t_philo_data *)content;
+	// pthread_mutex_lock(philo_data.mutex);
+	// num = philo_data.num;
+	// pthread_mutex_unlock(philo_data.mutex);
 	while (1)
 	{
-        // pthread_mutex_lock(philo_data.mutex_for_lock);
 		i = 0;
+        pthread_mutex_lock(philo_data.mutex);
         if (philo_data.total_num_philos == 1)
         {
             gettimeofday(&current_time, NULL);
             printf("Philo %d died: Timestap m %d\n", i, current_time.tv_usec);
-			// pthread_mutex_unlock(philo_data.mutex_for_lock);
+			pthread_mutex_unlock(philo_data.mutex);
             return (NULL);
         }
         if (philo_data.min_rounds != -1 && philo_data.min_rounds <= *philo_data.rounds)
         {
             gettimeofday(&current_time, NULL);
             printf("Philos have eaten at leat %d times: Timestamp %d\n", philo_data.min_rounds / philo_data.total_num_philos, current_time.tv_usec);
-			// pthread_mutex_unlock(philo_data.mutex_for_lock);
+			pthread_mutex_unlock(philo_data.mutex);
             return (NULL);
         }
 		while (i < philo_data.total_num_philos)
@@ -109,12 +108,12 @@ void	*die(void *content)
 			{
 				philo_data.time_death = current_time;
 				printf("Philo %d died: Timestap m %d\n", i, philo_data.time_death.tv_usec);
-				// pthread_mutex_unlock(philo_data.mutex_for_lock);
+				pthread_mutex_unlock(philo_data.mutex);
                 return (NULL);
 			}
 			i++;
 		}
-		// pthread_mutex_unlock(philo_data.mutex_for_lock);
+		pthread_mutex_unlock(philo_data.mutex);
 	}
 	return (NULL);
 }
@@ -128,13 +127,9 @@ int main(int argc, char **argv)
     
     if (argc >= 5 && atoi(argv[1]) > 0)
     {
-        pthread_mutex_init(&mutex_think, NULL);
-        pthread_mutex_init(&mutex_sleep, NULL);
-        pthread_mutex_init(&mutex_eat, NULL);
-        pthread_mutex_init(&mutex, NULL);
 		philos = init_philos(atoi(argv[1]));
         init_philo_data(&philo_data, argv, argc);
-		//pthread_create(&check_death, NULL, &die, (void *)&philo_data);
+		pthread_create(&check_death, NULL, &die, (void *)&philo_data);
         i = 0;
         while (i < philo_data.total_num_philos)
         {
@@ -147,10 +142,10 @@ int main(int argc, char **argv)
         i = 0;
         while (i < philo_data.total_num_philos)
         {
-            pthread_join(philos[i], NULL);
+            pthread_detach(philos[i]);
             i++;
         }
-		//pthread_join(check_death, NULL);
+		pthread_join(check_death, NULL);
         free(philo_data.forks);
         free(philo_data.time_arr);
         free(philo_data.rounds);
