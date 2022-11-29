@@ -39,29 +39,15 @@ double	get_ms(t_timeval time)
 
 void	output(t_philo_data *philo_data, char *activity_str)
 {
+	t_timeval	current;
+
 	pthread_mutex_lock(philo_data->mutex);
-	putstr_arg("philo num % starts ", philo_data->num, 0);
+	gettimeofday(&current, NULL);
+	putstr_arg("% is ", philo_data->num, 0);
     putstr_arg(activity_str, 0, 0);
 	putstr_arg("\n", 0, 0);
 	pthread_mutex_unlock(philo_data->mutex);
 }
-
-// void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str)
-// {
-//     //if (activity != EAT)
-// 	pthread_mutex_lock(philo_data->mutex_activity);
-//     putstr_arg("philo num % starts ", philo_data->num, 0, philo_data->mutex);
-//     putstr_arg(activity_str, 0, 0, philo_data->mutex);
-//     write(1, "\n", 1);
-//     if (activity == EAT)
-//         usleep(philo_data->time_to_eat * 1000);
-//     else if (activity == SLEEP)
-//         usleep(philo_data->time_to_sleep * 1000);
-//     putstr_arg("philo num % finished ", philo_data->num, 0, philo_data->mutex);
-//     putstr_arg(activity_str, 0, 0, philo_data->mutex);
-//     write(1, "\n", 1);
-// 	pthread_mutex_unlock(philo_data->mutex_activity);
-// }
 
 void    my_usleep(double wait_usec)
 {
@@ -73,7 +59,6 @@ void    my_usleep(double wait_usec)
     end_time_usec = get_ms(start_sleep) + (wait_usec / 1000000.0);
     while (1)
     {
-        //printf("end time %f, wait usec %f\n", end_time_usec, wait_usec);
         gettimeofday(&start_sleep, NULL);
         unix_time_usec = get_ms(start_sleep);
         if (unix_time_usec >= end_time_usec)

@@ -1,6 +1,6 @@
 #include "../inc/philo.h"
 
-void    putstr_arg(char *str, int arg, char c)
+void    putstr_arg(char *str, long long arg, char c)
 {
     while (*str)
     {
@@ -30,8 +30,9 @@ void    putstr_arg(char *str, int arg, char c)
 void    *routine(void *content)
 {
 
-    t_philo_data philo_data;
-	int	last_index;
+    t_philo_data	philo_data;
+	int				last_index;
+	t_timeval		current;
 
     philo_data = *(t_philo_data *)content;
     if (philo_data.total_num_philos > 1)
@@ -41,11 +42,23 @@ void    *routine(void *content)
 			output(&philo_data, THINK_STR);
 
 			pthread_mutex_lock(philo_data.mutex);
+			gettimeofday(&current, NULL);
 			last_index = (philo_data.num + 1) % philo_data.total_num_philos;
 			pthread_mutex_unlock(philo_data.mutex);
 
             pthread_mutex_lock(&philo_data.forks[philo_data.num]);
+
+			pthread_mutex_lock(philo_data.mutex);
+			gettimeofday(&current, NULL);
+			putstr_arg("% has taken a fork\n", philo_data.num, 0);
+			pthread_mutex_unlock(philo_data.mutex);
+
             pthread_mutex_lock(&philo_data.forks[last_index]);
+
+			pthread_mutex_lock(philo_data.mutex);
+			gettimeofday(&current, NULL);
+			putstr_arg("% has taken a fork\n", philo_data.num, 0);
+			pthread_mutex_unlock(philo_data.mutex);
 
 			pthread_mutex_lock(philo_data.mutex);
             gettimeofday(philo_data.time_arr + philo_data.num, NULL);

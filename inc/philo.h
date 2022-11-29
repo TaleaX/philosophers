@@ -61,6 +61,6 @@ void	ft_putnbr_fd(int n, int fd);
 //printf
 int	ft_printf(const char *str, ...);
 
-void    putstr_arg(char *str, int arg, char c);
+void    putstr_arg(char *str, long long arg, char c);
 
 #endif
