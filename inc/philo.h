@@ -45,7 +45,7 @@ t_bool  is_dead(t_philo_data *philo_data, int num);
 void    unlock(t_bool *mutex);
 void    lock(t_bool *mutex, t_philo_data *philo_data, int num);
 void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
-double	get_ms(t_timeval time);
+double	get_s(t_timeval time);
 void    my_usleep(double wait_usec);
 void	output(t_philo_data *philo_data, char *activity_str);
 long long	get_millis(t_timeval time);

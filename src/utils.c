@@ -11,9 +11,9 @@
 // 	while (i < num)
 // 	{
 // 		pthread_mutex_lock(&philo_data->mutex_for_lock);
-// 		time_last_meal = get_ms(philo_data->time_arr[i]);
+// 		time_last_meal = get_s(philo_data->time_arr[i]);
 // 		gettimeofday(&current_time, NULL);
-// 		curtime = get_ms(current_time);
+// 		curtime = get_s(current_time);
 //         printf("philo %d, cur time - last meal %f, time to die %f\n", num , curtime - time_last_meal, (double) philo_data->time_to_die / 1000.0);
 // 		if (curtime - time_last_meal > ((double) philo_data->time_to_die / 1000.0))
 // 		{
@@ -26,13 +26,13 @@
 //     return (FALSE);
 // }
 
-double	get_ms(t_timeval time)
+double	get_s(t_timeval time)
 {
 	double	cur;
 
 	cur = 0;
 	cur += time.tv_sec;
-	cur += (double) time.tv_usec / 1000000.0;
+	cur += (double) time.tv_usec / 1e6;
 	return (cur);
 }
 
@@ -67,11 +67,11 @@ void    my_usleep(double wait_usec)
     double      end_time_usec;
 
     gettimeofday(&start_sleep, NULL);
-    end_time_usec = get_ms(start_sleep) + (wait_usec / 1000000.0);
+    end_time_usec = get_s(start_sleep) + (wait_usec / 1000000.0);
     while (1)
     {
         gettimeofday(&start_sleep, NULL);
-        unix_time_usec = get_ms(start_sleep);
+        unix_time_usec = get_s(start_sleep);
         if (unix_time_usec >= end_time_usec)
             break ;
     }

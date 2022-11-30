@@ -119,9 +119,9 @@ void	*die(void *content)
         }
 		while (i < philo_data.total_num_philos)
 		{
-			time_last_meal = get_ms(philo_data.time_arr[i]);
+			time_last_meal = get_s(philo_data.time_arr[i]);
 			gettimeofday(&current_time, NULL);
-			curtime = get_ms(current_time);
+			curtime = get_s(current_time);
 			// printf("curtime %f time last meal %f diff %f > %f  Timestap %lld\n", curtime, time_last_meal, curtime - time_last_meal, (double) philo_data.time_to_die / 1000, get_millis(current_time));
 			if (curtime - time_last_meal > ((double) philo_data.time_to_die / 1000))
 			{
