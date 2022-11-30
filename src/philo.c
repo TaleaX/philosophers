@@ -32,28 +32,35 @@ void    *routine(void *content)
 
     t_philo_data	philo_data;
 	int				last_index;
+    int             last_index2;
 	t_timeval		current;
+    int             timestamp;
 	// t_timeval		*last_eaten;
 
     philo_data = *(t_philo_data *)content;
+    pthread_mutex_lock(philo_data.mutex);
+	gettimeofday(&current, NULL);
+    philo_data.time_thread_start[philo_data.num] = get_millis(current);
+	pthread_mutex_unlock(philo_data.mutex);
     if (philo_data.total_num_philos > 1)
     {
         while (1)
         {
 			output(&philo_data, THINK_STR);
 
-			pthread_mutex_lock(philo_data.mutex);
-			gettimeofday(&current, NULL);
-			last_index = (philo_data.num + 1) % philo_data.total_num_philos;
-			pthread_mutex_unlock(philo_data.mutex);
-
             pthread_mutex_lock(&philo_data.forks[philo_data.num]);
 
-			pthread_mutex_lock(philo_data.mutex);
+			pthread_mutex_lock(philo_data.mutex_write);
 			gettimeofday(&current, NULL);
 			// putstr_arg("% \n", get_millis(current), 0);
 			// putstr_arg("% has taken a fork\n", philo_data.num, 0);
-			printf("%lld %d has taken a fork\n", get_millis(current), philo_data.num);
+			printf("%lld %d has taken a fork\n", get_mils_start(get_millis(current), philo_data.time_thread_start[philo_data.num]), philo_data.num);
+            printf("last index %d\n", last_index);
+			pthread_mutex_unlock(philo_data.mutex_write);
+
+
+			pthread_mutex_lock(philo_data.mutex);
+			last_index = (philo_data.num + 1) % philo_data.total_num_philos;
 			pthread_mutex_unlock(philo_data.mutex);
 
             pthread_mutex_lock(&philo_data.forks[last_index]);
@@ -63,6 +70,7 @@ void    *routine(void *content)
 			// putstr_arg("% \n", get_millis(current), 0);
 			// putstr_arg("% has taken a fork\n", philo_data.num, 0);
 			printf("%lld %d has taken a fork\n", get_millis(current), philo_data.num);
+            printf("last index %d\n", last_index);
 			pthread_mutex_unlock(philo_data.mutex);
 
 			pthread_mutex_lock(philo_data.mutex);
@@ -77,7 +85,12 @@ void    *routine(void *content)
 			pthread_mutex_unlock(philo_data.mutex);
 
             pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
-            pthread_mutex_unlock(&philo_data.forks[last_index]);
+
+            pthread_mutex_lock(philo_data.mutex);
+			last_index2 = (philo_data.num + 1) % philo_data.total_num_philos;
+			pthread_mutex_unlock(philo_data.mutex);
+
+            pthread_mutex_unlock(&philo_data.forks[last_index2]);
 
             output(&philo_data, SLEEP_STR);
 			my_usleep(philo_data.time_to_sleep * 1000);
@@ -96,25 +109,22 @@ void	*die(void *content)
 	// int				num;
 
     philo_data = *(t_philo_data *)content;
-	// pthread_mutex_lock(philo_data.mutex);
-	// num = philo_data.num;
-	// pthread_mutex_unlock(philo_data.mutex);
 	while (1)
 	{
 		i = 0;
-        // pthread_mutex_lock(philo_data.mutex);
+        pthread_mutex_lock(philo_data.mutex);
         if (philo_data.total_num_philos == 1)
         {
             gettimeofday(&current_time, NULL);
-            printf("Philo %d died: Timestap m %d\n", i, current_time.tv_usec);
-			// pthread_mutex_unlock(philo_data.mutex);
+            printf("Philo %d died: Timestap m %ld\n", i, current_time.tv_usec);
+			pthread_mutex_unlock(philo_data.mutex);
             return (NULL);
         }
         if (philo_data.min_rounds != -1 && philo_data.min_rounds <= *philo_data.rounds)
         {
             gettimeofday(&current_time, NULL);
-            printf("Philos have eaten at leat %d times: Timestamp %d\n", philo_data.min_rounds / philo_data.total_num_philos, current_time.tv_usec);
-			// pthread_mutex_unlock(philo_data.mutex);
+            printf("Philos have eaten at leat %d times: Timestamp %ld\n", philo_data.min_rounds / philo_data.total_num_philos, current_time.tv_usec);
+			pthread_mutex_unlock(philo_data.mutex);
             return (NULL);
         }
 		while (i < philo_data.total_num_philos)
@@ -127,12 +137,12 @@ void	*die(void *content)
 			{
 				// printf("curtime %f time last meal %f diff %f > %f  Timestap %lld\n", curtime, time_last_meal, curtime - time_last_meal, (double) philo_data.time_to_die / 1000, get_millis(current_time));
 				printf("Philo %d died: Timestap m %lld\n", i, get_millis(current_time));
-				// pthread_mutex_unlock(philo_data.mutex);
+				pthread_mutex_unlock(philo_data.mutex);
                 return (NULL);
 			}
 			i++;
 		}
-		// pthread_mutex_unlock(philo_data.mutex);
+		pthread_mutex_unlock(philo_data.mutex);
 	}
 	return (NULL);
 }

@@ -31,13 +31,14 @@ typedef struct s_philo_data {
     int         *rounds;
     int         num_forks;
     pthread_mutex_t *mutex;
-    pthread_mutex_t *mutex_activity;
+    pthread_mutex_t *mutex_write;
     pthread_mutex_t *forks;
-    int         time_to_sleep;
-    int         time_to_die;
-    int         time_to_eat;
-    t_timeval  *time_arr;
-    t_timeval  time_death;
+    int             time_to_sleep;
+    int             time_to_die;
+    int             time_to_eat;
+    t_timeval       *time_arr;
+    long long       *time_thread_start;
+    t_timeval       time_death;
 }   t_philo_data;
 
 //utils
@@ -49,6 +50,7 @@ double	get_s(t_timeval time);
 void    my_usleep(double wait_usec);
 void	output(t_philo_data *philo_data, char *activity_str);
 long long	get_millis(t_timeval time);
+int	get_mils_start(long long current, long long start);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);

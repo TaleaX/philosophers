@@ -17,6 +17,16 @@ t_timeval   *create_time_arr(int num)
     return (times);
 }
 
+t_timeval   *create_time_start_arr(int num)
+{
+    long long   *times;
+
+    times = malloc(sizeof(long long) * (num));
+    if (!times)
+        return (NULL);
+    return (times);
+}
+
 static pthread_mutex_t *create_forks(int num)
 {
     pthread_mutex_t *forks;
@@ -70,10 +80,11 @@ void    init_philo_data(t_philo_data *philo_data, char **argv, char argc)
     philo_data->time_to_eat = atoi(argv[3]);
     philo_data->time_to_sleep = atoi(argv[4]);
 	philo_data->time_arr = create_time_arr(philo_data->total_num_philos);
+    philo_data->time_thread_start = create_time_start_arr(philo_data->total_num_philos);
 	philo_data->mutex = malloc(sizeof(pthread_mutex_t));
-    philo_data->mutex_activity = malloc(sizeof(pthread_mutex_t));
+    philo_data->mutex_write = malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(philo_data->mutex, NULL);
-    pthread_mutex_init(philo_data->mutex_activity, NULL);
+    pthread_mutex_init(philo_data->mutex_write, NULL);
 	philo_data->min_rounds = -1;
     philo_data->rounds = malloc(sizeof(int));
     *philo_data->rounds = 0;

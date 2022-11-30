@@ -46,18 +46,23 @@ long long	get_millis(t_timeval time)
 	return (cur);
 }
 
+int	get_mils_start(long long current, long long start)
+{
+	return (start - current);
+}
+
 void	output(t_philo_data *philo_data, char *activity_str)
 {
 	t_timeval	current;
 
-	pthread_mutex_lock(philo_data->mutex);
+	pthread_mutex_lock(philo_data->mutex_write);
 	gettimeofday(&current, NULL);
 	// putstr_arg("% ", get_millis(current), 0);
 	// putstr_arg("% is ", philo_data->num, 0);
     // putstr_arg(activity_str, 0, 0);
 	// putstr_arg("\n", 0, 0);
 	printf("%lld %d is %s\n", get_millis(current), philo_data->num, activity_str);
-	pthread_mutex_unlock(philo_data->mutex);
+	pthread_mutex_unlock(philo_data->mutex_write);
 }
 
 void    my_usleep(double wait_usec)
