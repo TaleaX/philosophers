@@ -48,6 +48,7 @@ void    do_activity(t_philo_data *philo_data, t_activity activity, char *activit
 double	get_ms(t_timeval time);
 void    my_usleep(double wait_usec);
 void	output(t_philo_data *philo_data, char *activity_str);
+long long	get_millis(t_timeval time);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);
