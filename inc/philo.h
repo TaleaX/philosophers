@@ -29,15 +29,14 @@ typedef struct s_philo_data {
     int         total_num_philos;
     int         min_rounds;
     int         *rounds;
-    int         num_forks;
     pthread_mutex_t *mutex;
-    pthread_mutex_t *mutex_write;
     pthread_mutex_t *forks;
     int             time_to_sleep;
     int             time_to_die;
     int             time_to_eat;
-    t_timeval       *time_arr;
     long long       *time_thread_start;
+	long long		*time_last_eaten;
+	long long		*time_current;
     t_timeval       time_death;
 }   t_philo_data;
 
@@ -54,7 +53,7 @@ int	get_mils_start(long long current, long long start);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);
-t_timeval   *create_time_arr(int num);
+long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 
 //libft
