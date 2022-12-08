@@ -1,6 +1,6 @@
 
 CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall -fsanitize=thread
+CFLAGS		=	-Werror -Wextra -Wall #-fsanitize=thread -TSAN_OPTIONS=second_deadlock_stack=1
 
 NAME 		=	philo
 
@@ -9,7 +9,7 @@ SRC_DIR		=	src/
 OBJ_DIR		=	obj/
 LIB_DIR		=	libft/
 
-SRC_NAME	=	philo utils init libft ft_printf ft_utils ft_write_arg libft_printf
+SRC_NAME	=	philo utils init
 INC_NAME	=	philo.h
 
 SRC_FILES	=	$(addsuffix .c, $(addprefix $(SRC_DIR), $(SRC_NAME)))

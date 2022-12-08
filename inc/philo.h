@@ -29,15 +29,19 @@ typedef struct s_philo_data {
     int         total_num_philos;
     int         min_rounds;
     int         *rounds;
+    int         num_forks;
     pthread_mutex_t *mutex;
+    pthread_mutex_t *mutex_activity;
     pthread_mutex_t *forks;
-    int             time_to_sleep;
-    int             time_to_die;
-    int             time_to_eat;
-    long long       *time_thread_start;
-	long long		*time_last_eaten;
-	long long		*time_current;
-    t_timeval       time_death;
+    t_bool          *forks_b;
+    int         time_to_sleep;
+    int         time_to_die;
+    int         time_to_eat;
+    //t_timeval   *time_arr;
+    long long   *time_thread_start;
+    long long   *time_current;
+    long long   *time_last_eaten;
+    t_timeval  time_death;
 }   t_philo_data;
 
 //utils
@@ -48,7 +52,8 @@ void    do_activity(t_philo_data *philo_data, t_activity activity, char *activit
 double	get_s(t_timeval time);
 void    my_usleep(double wait_usec);
 void	output(t_philo_data *philo_data, char *activity_str);
-long long	get_millis(t_timeval time);
+void	wait_for_death(t_philo_data philo_data);
+long long	get_current_millis();
 int	get_mils_start(long long current, long long start);
 
 //init
@@ -56,12 +61,6 @@ void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);
 long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 
-//libft
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
-
-//printf
-int	ft_printf(const char *str, ...);
 
 void    putstr_arg(char *str, long long arg, char c);
 
