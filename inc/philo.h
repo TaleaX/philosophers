@@ -9,9 +9,10 @@
 
 #define TRUE 1
 #define FALSE 0
-#define EAT_STR "eating"
-#define SLEEP_STR "sleeping"
-#define THINK_STR "thinking"
+#define EAT_STR "is eating"
+#define SLEEP_STR "is sleeping"
+#define THINK_STR "is thinking"
+#define FORK_TAKEN "has taken a fork"
 
 typedef struct timeval t_timeval;
 typedef int t_bool;
@@ -56,7 +57,7 @@ void		wait_for_death(t_philo_data *philo_data);
 long long	get_current_millis();
 int			get_mils_start(long long current, long long start);
 void		lock_right_fork(t_philo_data *philo_data);
-void		take_fork_print(t_philo_data *philo_data);
+// void		take_fork_print(t_philo_data *philo_data);
 void		set_var(t_philo_data *philo_data, int *dest, int source);
 void	unlock_right_fork(t_philo_data *philo_data);
 

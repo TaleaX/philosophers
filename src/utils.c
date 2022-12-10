@@ -48,7 +48,6 @@ void	lock_right_fork(t_philo_data *philo_data)
 	last_index = (philo_data->num + 1) % philo_data->total_num_philos;
 	pthread_mutex_unlock(philo_data->mutex);
 	pthread_mutex_lock(&philo_data->forks[last_index]);
-	take_fork_print(philo_data);
 }
 
 void	unlock_right_fork(t_philo_data *philo_data)
@@ -69,15 +68,15 @@ void	set_var(t_philo_data *philo_data, int *dest, int source)
 	pthread_mutex_unlock(philo_data->mutex);
 }
 
-void	take_fork_print(t_philo_data *philo_data)
-{
-	long long		current;
+// void	take_fork_print(t_philo_data *philo_data)
+// {
+// 	long long		current;
 
-	pthread_mutex_lock(philo_data->mutex);
-	current = get_current_millis();
-	printf("%d %d has taken a fork\n", get_mils_start(current, philo_data->time_thread_start[philo_data->num]), philo_data->num);
-	pthread_mutex_unlock(philo_data->mutex);
-}
+// 	pthread_mutex_lock(philo_data->mutex);
+// 	current = get_current_millis();
+// 	printf("%d %d has taken a fork\n", get_mils_start(current, philo_data->time_thread_start[philo_data->num]), philo_data->num);
+// 	pthread_mutex_unlock(philo_data->mutex);
+// }
 
 double	get_s(t_timeval time)
 {
@@ -112,7 +111,7 @@ void	output(t_philo_data *philo_data, char *activity_str)
 
 	pthread_mutex_lock(philo_data->mutex);
 	current = get_current_millis();
-    printf("%d %d is %s \n", get_mils_start(current, philo_data->time_thread_start[philo_data->num]), philo_data->num, activity_str);
+    printf("%d %d %s \n", get_mils_start(current, philo_data->time_thread_start[philo_data->num]), philo_data->num, activity_str);
 	pthread_mutex_unlock(philo_data->mutex);
 }
 
