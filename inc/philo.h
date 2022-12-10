@@ -45,16 +45,20 @@ typedef struct s_philo_data {
 }   t_philo_data;
 
 //utils
-t_bool  is_dead(t_philo_data *philo_data, int num);
-void    unlock(t_bool *mutex);
-void    lock(t_bool *mutex, t_philo_data *philo_data, int num);
-void    do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
-double	get_s(t_timeval time);
-void    my_usleep(double wait_usec);
-void	output(t_philo_data *philo_data, char *activity_str);
-void	wait_for_death(t_philo_data philo_data);
+t_bool  	is_dead(t_philo_data *philo_data, int num);
+void    	unlock(t_bool *mutex);
+void    	lock(t_bool *mutex, t_philo_data *philo_data, int num);
+void    	do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
+double		get_s(t_timeval time);
+void  	  	my_usleep(double wait_usec);
+void		output(t_philo_data *philo_data, char *activity_str);
+void		wait_for_death(t_philo_data *philo_data);
 long long	get_current_millis();
-int	get_mils_start(long long current, long long start);
+int			get_mils_start(long long current, long long start);
+void		lock_right_fork(t_philo_data *philo_data);
+void		take_fork_print(t_philo_data *philo_data);
+void		set_var(t_philo_data *philo_data, int *dest, int source);
+void	unlock_right_fork(t_philo_data *philo_data);
 
 //init
 void    init_philo_data(t_philo_data *philo_data, char **argv, char argc);

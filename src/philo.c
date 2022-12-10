@@ -32,7 +32,7 @@ void    *routine(void *content)
 
     t_philo_data	philo_data;
 	int				last_index;
-	long long		current;
+	// long long		current;
     // int             start_philo;
     // int             changed_state;
 
@@ -47,61 +47,59 @@ void    *routine(void *content)
         while (1)
         {
 			    output(&philo_data, THINK_STR);
-            // if (!changed_state)
-            // {
-            //     pthread_mutex_lock(philo_data.mutex);
-            //     changed_state = 1;
-            //     pthread_mutex_unlock(philo_data.mutex);
-            // }
-            // // printf("%d %d\n", start_philo % 2 , philo_data.num % 2);
-            // if (start_philo % 2 == philo_data.num % 2)
-            // {
-                pthread_mutex_lock(&philo_data.forks[philo_data.num]);
 
-                pthread_mutex_lock(philo_data.mutex);
-                current = get_current_millis();
-                printf("%d %d has taken a fork\n", get_mils_start(current, philo_data.time_thread_start[philo_data.num]), philo_data.num);
-                last_index = (philo_data.num + 1) % philo_data.total_num_philos;
+				if (philo_data.num == philo_data.total_num_philos - 1)
+					lock_right_fork(&philo_data);
+				else
+                	pthread_mutex_lock(&philo_data.forks[philo_data.num]);
+				take_fork_print(&philo_data);
+				if (philo_data.num == philo_data.total_num_philos - 1)
+					pthread_mutex_lock(&philo_data.forks[philo_data.num]);
+				else
+					lock_right_fork(&philo_data);
+				take_fork_print(&philo_data);
+                // pthread_mutex_lock(philo_data.mutex);
+                // current = get_current_millis();
+                // printf("%d %d has taken a fork\n", get_mils_start(current, philo_data.time_thread_start[philo_data.num]), philo_data.num);
+                // last_index = (philo_data.num + 1) % philo_data.total_num_philos;
 
-                pthread_mutex_unlock(philo_data.mutex);
-                pthread_mutex_lock(&philo_data.forks[last_index]);
+                // pthread_mutex_unlock(philo_data.mutex);
+                // pthread_mutex_lock(&philo_data.forks[last_index]);
 
-                pthread_mutex_lock(philo_data.mutex);
-                current = get_current_millis();
-                printf("%d %d has taken a fork\n",get_mils_start(current, philo_data.time_thread_start[philo_data.num]), philo_data.num);
-                pthread_mutex_unlock(philo_data.mutex);
+                // pthread_mutex_lock(philo_data.mutex);
+                // current = get_current_millis();
+                // printf("%d %d has taken a fork\n",get_mils_start(current, philo_data.time_thread_start[philo_data.num]), philo_data.num);
+                // pthread_mutex_unlock(philo_data.mutex);
 
+				pthread_mutex_lock(philo_data.mutex);
                 philo_data.time_last_eaten[philo_data.num] = get_current_millis();
+				pthread_mutex_unlock(philo_data.mutex);
 
                 output(&philo_data, EAT_STR);
                 my_usleep(philo_data.time_to_eat * 1000);
 
+				// set_var(&philo_data, philo_data.rounds, (*philo_data.rounds) + 1);
                 pthread_mutex_lock(philo_data.mutex);
                 (*philo_data.rounds)++;
-                // if ((*philo_data.rounds % (philo_data.total_num_philos / 2)) == 0)
-                // {
-                //     start_philo = !start_philo;
-                //     changed_state = 0;
-                // }
                 pthread_mutex_unlock(philo_data.mutex);
 
-                pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
-                pthread_mutex_lock(philo_data.mutex);
-                last_index = (philo_data.num + 1) % philo_data.total_num_philos;
-                pthread_mutex_unlock(philo_data.mutex);
-                pthread_mutex_unlock(&philo_data.forks[last_index]);
+				if (philo_data.num == philo_data.total_num_philos - 1)
+					unlock_right_fork(&philo_data);
+				else
+                	pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
+				if (philo_data.num == philo_data.total_num_philos - 1)
+					pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
+				else
+					unlock_right_fork(&philo_data);
+                // pthread_mutex_unlock(&philo_data.forks[philo_data.num]);
+                // pthread_mutex_lock(philo_data.mutex);
+                // last_index = (philo_data.num + 1) % philo_data.total_num_philos;
+                // pthread_mutex_unlock(philo_data.mutex);
+				// // set_var(&philo_data, &last_index, (philo_data.num + 1) % philo_data.total_num_philos);
+                // pthread_mutex_unlock(&philo_data.forks[last_index]);
 
                 output(&philo_data, SLEEP_STR);
                 my_usleep(philo_data.time_to_sleep * 1000);
-            // }
-            
-            // else
-            // {
-            //     while (start_philo)
-            //     {
-            //        my_usleep(1);
-            //     }
-            // }
         }
     }
     return (NULL);
@@ -132,9 +130,10 @@ int main(int argc, char **argv)
             pthread_detach(philos[i]);
             i++;
         }
-        wait_for_death(philo_data);
+        wait_for_death(&philo_data);
         free(philo_data.forks);
         free(philo_data.rounds);
+		pthread_mutex_unlock(philo_data.mutex);
     }
     return (EXIT_SUCCESS);
 }
