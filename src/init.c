@@ -17,38 +17,38 @@
 //     return (times);
 // }
 
-long long   *create_time_arr(int num)
-{
-    long long   *times;
-    int         i;
+// long long   *create_time_arr(int num)
+// {
+//     long long   *times;
+//     int         i;
 
-    times = malloc(sizeof(long long) * (num));
-    if (!times)
-        return (NULL);
-    i = 0;
-    while (i < num)
-    {
-        times[i++] = 0;
-    }
-    return (times);
-}
+//     times = malloc(sizeof(long long) * (num));
+//     if (!times)
+//         return (NULL);
+//     i = 0;
+//     while (i < num)
+//     {
+//         times[i++] = 0;
+//     }
+//     return (times);
+// }
 
-static pthread_mutex_t *create_forks(int num)
-{
-    pthread_mutex_t *forks;
-    int i;
+// static pthread_mutex_t *create_forks(int num)
+// {
+//     pthread_mutex_t *forks;
+//     int i;
 
-    forks = malloc(sizeof(pthread_mutex_t) * (num));
-    if (!forks)
-        return (NULL);
-    i = 0;
-    while (i < num)
-    {
-        pthread_mutex_init(&forks[i], NULL);
-        i++;
-    }
-    return (forks);
-}
+//     forks = malloc(sizeof(pthread_mutex_t) * (num));
+//     if (!forks)
+//         return (NULL);
+//     i = 0;
+//     while (i < num)
+//     {
+//         pthread_mutex_init(&forks[i], NULL);
+//         i++;
+//     }
+//     return (forks);
+// }
 
 // static t_bool *create_forks_b(int num)
 // {
@@ -67,37 +67,46 @@ static pthread_mutex_t *create_forks(int num)
 //     return (forks);
 // }
 
-pthread_t   *init_philos(int num)
+// pthread_t   *init_philos(int num)
+// {
+//     pthread_t   *philos;
+
+//     philos = malloc(sizeof(pthread_t) * num);
+//     return (philos);
+
+// }
+
+static t_philo_data	*init_philo_data(int len)
 {
-    pthread_t   *philos;
+	t_philo_data	*philo_data;
+	int		i;
 
-    philos = malloc(sizeof(pthread_t) * num);
-    return (philos);
-
+	philo_data = malloc(sizeof(philo_data) * len);
+	if (!philo_data)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		philo_data[i].last_eaten = 0;
+		philo_data[i].thread_start = 0;
+		pthread_mutex_init(&philo_data[i].fork_left, NULL);
+		i++;
+	}
+	return (philo_data);
 }
 
-void    init_philo_data(t_philo_data *philo_data, char **argv, char argc)
+void	init_data(t_data *data, char **argv, char argc)
 {
-    philo_data->num_forks = atoi(argv[1]);
-    philo_data->total_num_philos = atoi(argv[1]);
-    philo_data->time_to_die = atoi(argv[2]);
-    philo_data->time_to_eat = atoi(argv[3]);
-    philo_data->time_to_sleep = atoi(argv[4]);
-
-    philo_data->forks = create_forks(atoi(argv[1]));
-    // philo_data->forks_b = create_forks_b(atoi(argv[1]));
-
-	philo_data->time_thread_start = create_time_arr(philo_data->total_num_philos);
-    philo_data->time_current = create_time_arr(philo_data->total_num_philos);
-    philo_data->time_last_eaten = create_time_arr(philo_data->total_num_philos);
-
-	philo_data->mutex = malloc(sizeof(pthread_mutex_t));
-    philo_data->mutex_activity = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(philo_data->mutex, NULL);
-    pthread_mutex_init(philo_data->mutex_activity, NULL);
-	philo_data->min_rounds = -1;
-    philo_data->rounds = malloc(sizeof(int));
-    *philo_data->rounds = 0;
+    data->total_num_philos = atoi(argv[1]);
+    data->time_to_die = atoi(argv[2]);
+    data->time_to_eat = atoi(argv[3]);
+    data->time_to_sleep = atoi(argv[4]);
+	pthread_mutex_init(&data->mutex, NULL);
+    pthread_mutex_init(&data->mutex_activity, NULL);
+	data->min_rounds = -1;
+    data->rounds = malloc(sizeof(int));
+    *data->rounds = 0;
 	if (argc > 5)
-		philo_data->min_rounds = atoi(argv[5]) * philo_data->total_num_philos;
+		data->min_rounds = atoi(argv[5]) * data->total_num_philos;
+	data->philos = init_philo_data(data->total_num_philos);
 }
