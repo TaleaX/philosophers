@@ -33,22 +33,22 @@
 //     return (times);
 // }
 
-// static pthread_mutex_t *create_forks(int num)
-// {
-//     pthread_mutex_t *forks;
-//     int i;
+static pthread_mutex_t *create_forks(int num)
+{
+    pthread_mutex_t *forks;
+    int i;
 
-//     forks = malloc(sizeof(pthread_mutex_t) * (num));
-//     if (!forks)
-//         return (NULL);
-//     i = 0;
-//     while (i < num)
-//     {
-//         pthread_mutex_init(&forks[i], NULL);
-//         i++;
-//     }
-//     return (forks);
-// }
+    forks = malloc(sizeof(pthread_mutex_t) * (num));
+    if (!forks)
+        return (NULL);
+    i = 0;
+    while (i < num)
+    {
+        pthread_mutex_init(&forks[i], NULL);
+        i++;
+    }
+    return (forks);
+}
 
 // static t_bool *create_forks_b(int num)
 // {
@@ -76,7 +76,7 @@
 
 // }
 
-static t_philo_data	*init_philo_data(int len)
+static t_philo_data	*init_philo_data(int len, t_data *data)
 {
 	t_philo_data	*philo_data;
 	int		i;
@@ -89,7 +89,8 @@ static t_philo_data	*init_philo_data(int len)
 	{
 		philo_data[i].last_eaten = 0;
 		philo_data[i].thread_start = 0;
-		pthread_mutex_init(&philo_data[i].fork_left, NULL);
+		philo_data[i].data = data;
+		// pthread_mutex_init(&philo_data[i].fork_left, NULL);
 		i++;
 	}
 	return (philo_data);
@@ -101,6 +102,7 @@ void	init_data(t_data *data, char **argv, char argc)
     data->time_to_die = atoi(argv[2]);
     data->time_to_eat = atoi(argv[3]);
     data->time_to_sleep = atoi(argv[4]);
+	data->forks = create_forks(atoi(argv[1]));
 	pthread_mutex_init(&data->mutex, NULL);
     pthread_mutex_init(&data->mutex_activity, NULL);
 	data->min_rounds = -1;
@@ -108,5 +110,5 @@ void	init_data(t_data *data, char **argv, char argc)
     *data->rounds = 0;
 	if (argc > 5)
 		data->min_rounds = atoi(argv[5]) * data->total_num_philos;
-	data->philos = init_philo_data(data->total_num_philos);
+	data->philos = init_philo_data(data->total_num_philos, data);
 }

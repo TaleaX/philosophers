@@ -28,16 +28,16 @@ typedef enum activity {
 typedef struct s_philo_data {
     int         	num;
 	pthread_t		philo;
-    pthread_mutex_t fork_left;
     long long   	thread_start;
-    // long long   	current;
     long long   	last_eaten;
+	struct s_data	*data;
 }   t_philo_data;
 
 typedef struct s_data {
     int         	total_num_philos;
     int         	min_rounds;
     int         	*rounds;
+	pthread_mutex_t *forks;
     pthread_mutex_t mutex;
     pthread_mutex_t mutex_activity;
     int         	time_to_sleep;
@@ -53,17 +53,19 @@ void    	lock(t_bool *mutex, t_philo_data *philo_data, int num);
 void    	do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
 double		get_s(t_timeval time);
 void  	  	my_usleep(double wait_usec);
-void		output(t_philo_data *philo_data, char *activity_str);
-void		wait_for_death(t_philo_data *philo_data);
+void	output(t_philo_data *philo, char *activity_str);
+void	wait_for_death(t_data *data);
 long long	get_current_millis();
 int			get_mils_start(long long current, long long start);
 void		lock_right_fork(t_philo_data *philo_data);
 // void		take_fork_print(t_philo_data *philo_data);
 void		set_var(t_philo_data *philo_data, int *dest, int source);
 void	unlock_right_fork(t_philo_data *philo_data);
+int	ft_max(int num1, int num2);
+int	ft_min(int num1, int num2);
 
 //init
-void    init_data(t_philo_data *philo_data, char **argv, char argc);
+void	init_data(t_data *data, char **argv, char argc);
 long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 

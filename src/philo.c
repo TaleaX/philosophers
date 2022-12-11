@@ -29,44 +29,37 @@ void    putstr_arg(char *str, long long arg, char c)
 
 void    *routine(void *content)
 {
-    t_data	data;
+    t_philo_data	*philo;
 
-    data = *(t_data *)content;
-    data.philos[data.philos->num].thread_start = get_current_millis();
-    if (data.total_num_philos > 1)
+    philo = content;
+    philo->thread_start = get_current_millis();
+    if (philo->data->total_num_philos > 1)
     {
         while (1)
         {
-			    output(&data, THINK_STR);
-				if (data.num == data.total_num_philos - 1)
-					lock_right_fork(&data);
-				else
-                	pthread_mutex_lock(&data.forks[data.num]);
-				output(&data, FORK_TAKEN);
-				if (data.num == data.total_num_philos - 1)
-					pthread_mutex_lock(&data.forks[data.num]);
-				else
-					lock_right_fork(&data);
-				output(&data, FORK_TAKEN);
-				pthread_mutex_lock(data.mutex);
-                data.time_last_eaten[data.num] = get_current_millis();
-				pthread_mutex_unlock(data.mutex);
-                output(&data, EAT_STR);
-                my_usleep(data.time_to_eat * 1000);
-                pthread_mutex_lock(data.mutex);
-                (*data.rounds)++;
-                pthread_mutex_unlock(data.mutex);
+			    output(philo, THINK_STR);
 
-				if (data.num == data.total_num_philos - 1)
-					unlock_right_fork(&data);
-				else
-                	pthread_mutex_unlock(&data.forks[data.num]);
-				if (data.num == data.total_num_philos - 1)
-					pthread_mutex_unlock(&data.forks[data.num]);
-				else
-					unlock_right_fork(&data);
-                output(&data, SLEEP_STR);
-                my_usleep(data.time_to_sleep * 1000);
+				pthread_mutex_lock(&philo->data->forks[ft_min(philo->num, (philo->num + 1) % philo->data->total_num_philos)]);
+				output(philo, FORK_TAKEN);
+				pthread_mutex_lock(&philo->data->forks[ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)]);
+				output(philo, FORK_TAKEN);
+
+				pthread_mutex_lock(&philo->data->mutex);
+                philo->last_eaten = get_current_millis();
+				pthread_mutex_unlock(&philo->data->mutex);
+
+                output(philo, EAT_STR);
+                my_usleep(philo->data->time_to_eat * 1000);
+
+                pthread_mutex_lock(&philo->data->mutex);
+                (*philo->data->rounds)++;
+                pthread_mutex_unlock(&philo->data->mutex);
+
+				pthread_mutex_unlock(&philo->data->forks[ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)]);
+				pthread_mutex_unlock(&philo->data->forks[ft_min(philo->num, (philo->num + 1) % philo->data->total_num_philos)]);
+		
+                output(philo, SLEEP_STR);
+                my_usleep(philo->data->time_to_sleep * 1000);
         }
     }
     return (NULL);
@@ -85,15 +78,16 @@ int main(int argc, char **argv)
         {
 			pthread_mutex_lock(&data.mutex);
             data.philos[i].num = i;
-            pthread_create(&data.philos[i], NULL, &routine, (void *)&data);
-            // my_usleep(100);
+			pthread_mutex_unlock(&data.mutex);
+            pthread_create(&data.philos[i].philo, NULL, &routine, (void *)&data.philos[i]);
+            my_usleep(100);
             i++;
 
         }
         i = 0;
         while (i < data.total_num_philos)
         {
-            pthread_detach(&data.philos[i]);
+            pthread_detach(data.philos[i].philo);
             i++;
         }
         wait_for_death(&data);
