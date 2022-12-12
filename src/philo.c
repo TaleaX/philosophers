@@ -43,13 +43,16 @@ void    *routine(void *content)
 				output(philo, FORK_TAKEN);
 				pthread_mutex_lock(&philo->data->forks[ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)]);
 				output(philo, FORK_TAKEN);
-
+                
 				pthread_mutex_lock(&philo->data->mutex);
+				// printf("philo %d last eaten %lld current %lld diff %lld diff start %d\n", philo->num, philo->last_eaten, get_current_millis(), get_current_millis() - philo->last_eaten,get_current_millis() - philo->thread_start);
                 philo->last_eaten = get_current_millis();
 				pthread_mutex_unlock(&philo->data->mutex);
-
-                output(philo, EAT_STR);
+				
+				output(philo, EAT_STR);
                 my_usleep(philo->data->time_to_eat * 1000);
+
+
 
                 pthread_mutex_lock(&philo->data->mutex);
                 (*philo->data->rounds)++;
@@ -68,30 +71,29 @@ void    *routine(void *content)
 int main(int argc, char **argv)
 {
     t_data    data;
-    int             i;
+    // int             i;
     
-    if (argc >= 5 && atoi(argv[1]) > 0)
-    {
-        init_data(&data, argv, argc);
-        i = 0;
-        while (i < data.total_num_philos)
-        {
-			pthread_mutex_lock(&data.mutex);
-            data.philos[i].num = i;
-			pthread_mutex_unlock(&data.mutex);
-            pthread_create(&data.philos[i].philo, NULL, &routine, (void *)&data.philos[i]);
-            my_usleep(100);
-            i++;
+    // if (argc >= 5 && atoi(argv[1]) > 0)
+    // {
+    //     // init_data(&data, argv, argc);
+    //     // i = 0;
+    //     // while (i < data.total_num_philos)
+    //     // {
+	// 	// 	pthread_mutex_lock(&data.mutex);
+    //     //     data.philos[i].num = i;
+	// 	// 	pthread_mutex_unlock(&data.mutex);
+    //     //     pthread_create(&data.philos[i].philo, NULL, &routine, (void *)&data.philos[i]);
+    //     //     // usleep(100);
+    //     //     i++;
 
-        }
-        i = 0;
-        while (i < data.total_num_philos)
-        {
-            pthread_detach(data.philos[i].philo);
-            i++;
-        }
-        wait_for_death(&data);
-        free(data.rounds);
-    }
+    //     // }
+    //     // i = 0;
+    //     // while (i < data.total_num_philos)
+    //     // {
+    //     //     pthread_detach(data.philos[i].philo);
+    //     //     i++;
+    //     // }
+    //     // wait_for_death(&data);
+    // }
     return (EXIT_SUCCESS);
 }

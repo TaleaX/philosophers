@@ -98,17 +98,17 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 
 void	init_data(t_data *data, char **argv, char argc)
 {
-    data->total_num_philos = atoi(argv[1]);
-    data->time_to_die = atoi(argv[2]);
-    data->time_to_eat = atoi(argv[3]);
-    data->time_to_sleep = atoi(argv[4]);
-	data->forks = create_forks(atoi(argv[1]));
-	pthread_mutex_init(&data->mutex, NULL);
-    pthread_mutex_init(&data->mutex_activity, NULL);
-	data->min_rounds = -1;
-    data->rounds = malloc(sizeof(int));
-    *data->rounds = 0;
-	if (argc > 5)
-		data->min_rounds = atoi(argv[5]) * data->total_num_philos;
-	data->philos = init_philo_data(data->total_num_philos, data);
+    // data->total_num_philos = atoi(argv[1]);
+    // data->time_to_die = atoi(argv[2]);
+    // data->time_to_eat = atoi(argv[3]);
+    // data->time_to_sleep = atoi(argv[4]);
+	// data->forks = create_forks(atoi(argv[1]));
+	// pthread_mutex_init(&data->mutex, NULL);
+    // pthread_mutex_init(&data->mutex_write, NULL);
+	// data->min_rounds = -1;
+    // data->rounds = malloc(sizeof(int));
+    // *data->rounds = 0;
+	// if (argc > 5)
+	// 	data->min_rounds = atoi(argv[5]) * data->total_num_philos;
+	// data->philos = init_philo_data(data->total_num_philos, data);
 }

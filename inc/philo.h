@@ -13,6 +13,8 @@
 #define SLEEP_STR "is sleeping"
 #define THINK_STR "is thinking"
 #define FORK_TAKEN "has taken a fork"
+#define GET_MAX ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)
+#define GET_MIN ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)
 
 typedef struct timeval t_timeval;
 typedef int t_bool;
@@ -39,7 +41,7 @@ typedef struct s_data {
     int         	*rounds;
 	pthread_mutex_t *forks;
     pthread_mutex_t mutex;
-    pthread_mutex_t mutex_activity;
+	pthread_mutex_t mutex_write;
     int         	time_to_sleep;
     int         	time_to_die;
     int         	time_to_eat;

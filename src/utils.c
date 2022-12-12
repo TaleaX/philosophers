@@ -14,22 +14,23 @@ void	wait_for_death(t_data *data)
         {
             current = get_current_millis();
             printf("Philo %d died: Timestap m %d\n", i, get_mils_start(current, data->philos->thread_start));
+			// pthread_mutex_unlock(&data->mutex);
+            return ;
+        }
+        if (data->min_rounds != -1 && data->min_rounds <= *data->rounds)
+        {
+            current = get_current_millis();
+            printf("Philos have eaten at least %d times\n", (int)(data->min_rounds / data->total_num_philos));
 			pthread_mutex_unlock(&data->mutex);
             return ;
         }
-        // if (data->min_rounds != -1 && data->min_rounds <= *data->rounds)
-        // {
-        //     current = get_current_millis();
-        //     printf("Philos have eaten at least %d times: Timestamp %d\n", data->min_rounds / data->total_num_philos, get_mils_start(current, data->philos[].time_thread_start[data->num]));
-		// 	pthread_mutex_unlock(&data->mutex);
-        //     return ;
-        // }
 		while (i < data->total_num_philos)
 		{
             current = get_current_millis();
             time_last_eaten = data->philos[i].last_eaten;
-			if (time_last_eaten && (current - time_last_eaten > (data->time_to_die)))
+			if (time_last_eaten && (current - time_last_eaten > data->time_to_die))
 			{
+				printf("Philo %d time last eaten %lld current %lld diff %lld\n", i, time_last_eaten, current, current - time_last_eaten);
 				printf("-----------------------------Tmstp %d Philo %d died\n", get_mils_start(current, data->philos[i].thread_start), i);
 				pthread_mutex_unlock(&data->mutex);
                 return ;
@@ -109,10 +110,10 @@ void	output(t_philo_data *philo, char *activity_str)
 {
 	long long   current;
 
-	pthread_mutex_lock(&philo->data->mutex);
+	pthread_mutex_lock(&philo->data->mutex_write);
 	current = get_current_millis();
-    printf("%d %d %s \n", get_mils_start(current, philo->thread_start), philo->num, activity_str);
-	pthread_mutex_unlock(&philo->data->mutex);
+    printf("%d %d %s \n", (int)(current - philo->thread_start), philo->num, activity_str);
+	pthread_mutex_unlock(&philo->data->mutex_write);
 }
 
 int	ft_min(int num1, int num2)
@@ -141,3 +142,12 @@ void    my_usleep(double wait_usec)
             break ;
     }
 }
+
+// void	my_sleep(size_t sleep)
+// {
+// 	time_t	t;
+
+// 	t = get_time() + sleep;
+// 	while (get_time() < t)
+// 		usleep(30);
+// }

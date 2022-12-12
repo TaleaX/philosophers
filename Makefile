@@ -1,6 +1,6 @@
 
 CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall #-fsanitize=thread #-TSAN_OPTIONS=second_deadlock_stack=1
+CFLAGS		=	-Werror -Wextra -Wall #-fsanitize=thread
 
 NAME 		=	philo
 
