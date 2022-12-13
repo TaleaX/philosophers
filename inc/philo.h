@@ -32,6 +32,8 @@ typedef struct s_philo_data {
 	pthread_t		philo;
     long long   	thread_start;
     long long   	last_eaten;
+	int				first_fork;
+	int				sec_fork;
 	struct s_data	*data;
 }   t_philo_data;
 
@@ -39,6 +41,7 @@ typedef struct s_data {
     int         	total_num_philos;
     int         	min_rounds;
     int         	*rounds;
+	t_bool			alive;
 	pthread_mutex_t *forks;
     pthread_mutex_t mutex;
 	pthread_mutex_t mutex_write;
@@ -54,11 +57,11 @@ void    	unlock(t_bool *mutex);
 void    	lock(t_bool *mutex, t_philo_data *philo_data, int num);
 void    	do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
 double		get_s(t_timeval time);
-void  	  	my_usleep(double wait_usec);
+void    my_usleep(long long milli_sec);
 void	output(t_philo_data *philo, char *activity_str);
 void	wait_for_death(t_data *data);
 long long	get_current_millis();
-int			get_mils_start(long long current, long long start);
+int			get_diff_start(long long current, long long start);
 void		lock_right_fork(t_philo_data *philo_data);
 // void		take_fork_print(t_philo_data *philo_data);
 void		set_var(t_philo_data *philo_data, int *dest, int source);
