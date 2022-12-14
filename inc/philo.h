@@ -5,14 +5,16 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/time.h>
 
 #define TRUE 1
 #define FALSE 0
-#define EAT_STR "is eating"
-#define SLEEP_STR "is sleeping"
-#define THINK_STR "is thinking"
-#define FORK_TAKEN "has taken a fork"
+#define EAT_STR "is eating \U0001F35B"
+#define SLEEP_STR "is sleeping \U0001F4A4"
+#define THINK_STR "is thinking \U0001F4AD"
+#define FORK_TAKEN "has taken a fork \U0001F962"
+#define DEAD "died"
 #define GET_MAX ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)
 #define GET_MIN ft_max(philo->num, (philo->num + 1) % philo->data->total_num_philos)
 
@@ -68,9 +70,10 @@ void		set_var(t_philo_data *philo_data, int *dest, int source);
 void	unlock_right_fork(t_philo_data *philo_data);
 int	ft_max(int num1, int num2);
 int	ft_min(int num1, int num2);
+void	exit_threads(t_data *data);
 
 //init
-void	init_data(t_data *data, char **argv, char argc);
+void	init_data(t_data *data, char **argv);
 long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 

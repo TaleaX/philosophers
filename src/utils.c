@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 09:17:34 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/13 10:12:26 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/14 14:34:05 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,18 @@ void	output(t_philo_data *philo, char *activity_str)
 	long long   current;
 
 	pthread_mutex_lock(&philo->data->mutex_write);
-	if (philo->data->alive)
-	{
-		current = get_current_millis();
-		printf("%d %d %s \n", (int)(current - philo->thread_start), philo->num, activity_str);
-	}
-	else
-		printf("is dead\n");
+	current = get_current_millis();
+	if (philo->data->alive || !strncmp(activity_str, DEAD, 5))
+		printf("%dms %d %s \n", (int)(current - philo->thread_start), philo->num, activity_str);
 	pthread_mutex_unlock(&philo->data->mutex_write);
+}
+
+void    my_usleep(long long milli_sec)
+{
+	long long end = get_current_millis() + milli_sec;
+
+	while (get_current_millis() < end)
+		usleep(100);
 }
 
 int	ft_min(int num1, int num2)
@@ -50,10 +54,18 @@ int	ft_max(int num1, int num2)
 	return ((num1 > num2 ? num1 : num2));
 }
 
-void    my_usleep(long long milli_sec)
+void	exit_threads(t_data *data)
 {
-	long long end = get_current_millis() + milli_sec;
+	int	i;
 
-	while (get_current_millis() < end)
-		usleep(1);
+	i = 0;
+	while (i < data->total_num_philos)
+	{
+		pthread_join(data->philos[i].philo, NULL);
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&data->mutex);
+	free(data->forks);
+	free(data->philos);
 }
