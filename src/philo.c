@@ -21,28 +21,33 @@ void	wait_for_death(t_data *data)
 	while (1)
 	{	
 		i = 0;
-        // if (data->total_num_philos == 1)
-        // {
-		// 	data->alive = FALSE;
-        //     current = get_current_millis();
-		// 	output(&data->philos[0], DEAD);
-        //     return ;
-        // }
-		pthread_mutex_lock(&data->mutex);
+		usleep(100);
+        if (data->total_num_philos == 1)
+        {
+			pthread_mutex_lock(&data->mutex_alive);
+			data->alive = FALSE;
+			pthread_mutex_unlock(&data->mutex_alive);
+            current = get_current_millis();
+			output(&data->philos[0], DEAD);
+            return ;
+        }
+		// pthread_mutex_lock(&data->mutex);
 		while (i < data->total_num_philos)
 		{
             current = get_current_millis();
+			pthread_mutex_lock(&data->mutex_last_eaten);
             time_last_eaten = data->philos[i].last_eaten;
+			pthread_mutex_unlock(&data->mutex_last_eaten);
 			if (time_last_eaten && (current - time_last_eaten > data->time_to_die))
 			{
+				pthread_mutex_lock(&data->mutex_alive);
 				data->alive = FALSE;
+				pthread_mutex_unlock(&data->mutex_alive);
 				output(&data->philos[i], DEAD);
-				pthread_mutex_unlock(&data->mutex);
                 return ;
 			}
 			i++;
 		}
-		pthread_mutex_unlock(&data->mutex);
 		
 	}
 }
@@ -53,14 +58,14 @@ void    *routine(void *content)
 
     philo = content;
     philo->thread_start = get_current_millis();
-	pthread_mutex_lock(&philo->data->mutex);
+	pthread_mutex_lock(&philo->data->mutex_last_eaten);
 	philo->last_eaten = philo->thread_start;
-	pthread_mutex_unlock(&philo->data->mutex);
+	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
+	if (philo->num % 2)
+		usleep(philo->data->time_to_eat);
     if (philo->data->total_num_philos > 1)
     {
 		pthread_mutex_lock(&philo->data->mutex);
-		if (philo->num % 2)
-			usleep(philo->data->time_to_eat);
 		pthread_mutex_unlock(&philo->data->mutex);
         while (philo->data->alive)
         {
@@ -70,14 +75,14 @@ void    *routine(void *content)
 			pthread_mutex_lock(&philo->data->forks[philo->sec_fork]);
 			output(philo, FORK_TAKEN);
 			
-			pthread_mutex_lock(&philo->data->mutex);
+			pthread_mutex_lock(&philo->data->mutex_last_eaten);
 			philo->last_eaten = get_current_millis();
+			pthread_mutex_unlock(&philo->data->mutex_last_eaten);
 			output(philo, EAT_STR);
-			pthread_mutex_unlock(&philo->data->mutex);
 			my_usleep(philo->data->time_to_eat);
 
-			pthread_mutex_unlock(&philo->data->forks[philo->first_fork]);
 			pthread_mutex_unlock(&philo->data->forks[philo->sec_fork]);
+			pthread_mutex_unlock(&philo->data->forks[philo->first_fork]);
 	
 			output(philo, SLEEP_STR);
 			my_usleep(philo->data->time_to_sleep);

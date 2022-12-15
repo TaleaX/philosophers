@@ -46,7 +46,9 @@ typedef struct s_data {
 	t_bool			alive;
 	pthread_mutex_t *forks;
     pthread_mutex_t mutex;
+    pthread_mutex_t mutex_alive;
 	pthread_mutex_t mutex_write;
+    pthread_mutex_t mutex_last_eaten;
     int         	time_to_sleep;
     int         	time_to_die;
     int         	time_to_eat;

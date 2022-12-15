@@ -30,12 +30,13 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 	while (i < len)
 	{
 		philo_data[i].thread_start = 0;
+		philo_data[i].last_eaten = 0;
 		philo_data[i].data = data;
 		philo_data[i].num = i;
-		philo_data[i].first_fork = i;
-		philo_data[i].sec_fork = (i + 1) % len;
-		// philo_data[i].first_fork = ft_min(i, (i + 1) % len);
-		// philo_data[i].sec_fork = ft_max(i, (i + 1) % len);
+		// philo_data[i].first_fork = i;
+		// philo_data[i].sec_fork = (i + 1) % len;
+		philo_data[i].first_fork = ft_min(i, (i + 1) % len);
+		philo_data[i].sec_fork = ft_max(i, (i + 1) % len);
 		i++;
 	}
 	return (philo_data);
@@ -51,6 +52,8 @@ void	init_data(t_data *data, char **argv)
 	data->forks = create_forks(atoi(argv[1]));
 	pthread_mutex_init(&data->mutex, NULL);
     pthread_mutex_init(&data->mutex_write, NULL);
+	pthread_mutex_init(&data->mutex_last_eaten, NULL);
+	pthread_mutex_init(&data->mutex_alive, NULL);
 	// data->min_rounds = -1;
     // data->rounds = malloc(sizeof(int));
     // *data->rounds = 0;

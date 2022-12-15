@@ -41,7 +41,7 @@ void    my_usleep(long long milli_sec)
 	long long end = get_current_millis() + milli_sec;
 
 	while (get_current_millis() < end)
-		usleep(100);
+		usleep(500);
 }
 
 int	ft_min(int num1, int num2)
@@ -62,10 +62,16 @@ void	exit_threads(t_data *data)
 	while (i < data->total_num_philos)
 	{
 		pthread_join(data->philos[i].philo, NULL);
+		i++;
+	}
+	i = 0;
+	while (i < data->total_num_philos)
+	{
 		pthread_mutex_destroy(&data->forks[i]);
 		i++;
 	}
 	pthread_mutex_destroy(&data->mutex);
+	pthread_mutex_destroy(&data->mutex_last_eaten);
 	free(data->forks);
 	free(data->philos);
 }
