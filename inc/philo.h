@@ -36,16 +36,16 @@ typedef struct s_philo_data {
     long long   	last_eaten;
 	int				first_fork;
 	int				sec_fork;
+    int             times_eaten;
 	struct s_data	*data;
 }   t_philo_data;
 
 typedef struct s_data {
     int         	total_num_philos;
-    int         	min_rounds;
-    int         	*rounds;
+    int             min_times_eaten;
 	t_bool			alive;
 	pthread_mutex_t *forks;
-    pthread_mutex_t mutex;
+    pthread_mutex_t mutex_times_eaten;
     pthread_mutex_t mutex_alive;
 	pthread_mutex_t mutex_write;
     pthread_mutex_t mutex_last_eaten;
@@ -73,9 +73,10 @@ void	unlock_right_fork(t_philo_data *philo_data);
 int	ft_max(int num1, int num2);
 int	ft_min(int num1, int num2);
 void	exit_threads(t_data *data);
+t_bool	is_alive(t_data *data);
 
 //init
-void	init_data(t_data *data, char **argv);
+void	init_data(t_data *data, char **argv, int argc);
 long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 

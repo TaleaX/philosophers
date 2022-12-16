@@ -25,14 +25,26 @@ int	get_diff_start(long long current, long long start)
 	return (current - start);
 }
 
+t_bool	is_alive(t_data *data)
+{
+	t_bool	alive;
+
+	pthread_mutex_lock(&data->mutex_alive);
+	alive = data->alive;
+	pthread_mutex_unlock(&data->mutex_alive);
+	return (alive);
+}
+
 void	output(t_philo_data *philo, char *activity_str)
 {
 	long long   current;
 
 	pthread_mutex_lock(&philo->data->mutex_write);
-	current = get_current_millis();
-	if (philo->data->alive || !strncmp(activity_str, DEAD, 5))
+	if (is_alive(philo->data) || !strncmp(activity_str, DEAD, 5))
+	{
+		current = get_current_millis();
 		printf("%dms %d %s \n", (int)(current - philo->thread_start), philo->num, activity_str);
+	}
 	pthread_mutex_unlock(&philo->data->mutex_write);
 }
 
@@ -70,8 +82,10 @@ void	exit_threads(t_data *data)
 		pthread_mutex_destroy(&data->forks[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&data->mutex);
+	pthread_mutex_destroy(&data->mutex_times_eaten);
 	pthread_mutex_destroy(&data->mutex_last_eaten);
+	pthread_mutex_destroy(&data->mutex_alive);
+	pthread_mutex_destroy(&data->mutex_write);
 	free(data->forks);
 	free(data->philos);
 }

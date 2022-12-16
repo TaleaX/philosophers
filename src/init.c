@@ -37,12 +37,13 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		// philo_data[i].sec_fork = (i + 1) % len;
 		philo_data[i].first_fork = ft_min(i, (i + 1) % len);
 		philo_data[i].sec_fork = ft_max(i, (i + 1) % len);
+		philo_data[i].times_eaten = 0;
 		i++;
 	}
 	return (philo_data);
 }
 
-void	init_data(t_data *data, char **argv)
+void	init_data(t_data *data, char **argv, int argc)
 {
     data->total_num_philos = atoi(argv[1]);
     data->time_to_die = atoi(argv[2]);
@@ -50,14 +51,14 @@ void	init_data(t_data *data, char **argv)
     data->time_to_sleep = atoi(argv[4]);
 	data->alive = TRUE;
 	data->forks = create_forks(atoi(argv[1]));
-	pthread_mutex_init(&data->mutex, NULL);
+	pthread_mutex_init(&data->mutex_times_eaten, NULL);
     pthread_mutex_init(&data->mutex_write, NULL);
 	pthread_mutex_init(&data->mutex_last_eaten, NULL);
 	pthread_mutex_init(&data->mutex_alive, NULL);
-	// data->min_rounds = -1;
     // data->rounds = malloc(sizeof(int));
     // *data->rounds = 0;
-	// if (argc > 5)
-	// 	data->min_rounds = atoi(argv[5]) * data->total_num_philos;
+	data->min_times_eaten = -1;
+	if (argc > 5)
+		data->min_times_eaten = atoi(argv[5]);
 	data->philos = init_philo_data(data->total_num_philos, data);
 }
