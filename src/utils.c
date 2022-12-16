@@ -20,10 +20,12 @@ long long	get_current_millis()
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	get_diff_start(long long current, long long start)
-{
-	return (current - start);
-}
+
+
+// int	get_diff_start(long long current, long long start)
+// {
+// 	return (current - start);
+// }
 
 t_bool	is_alive(t_data *data)
 {
@@ -33,19 +35,6 @@ t_bool	is_alive(t_data *data)
 	alive = data->alive;
 	pthread_mutex_unlock(&data->mutex_alive);
 	return (alive);
-}
-
-void	output(t_philo_data *philo, char *activity_str)
-{
-	long long   current;
-
-	pthread_mutex_lock(&philo->data->mutex_write);
-	if (is_alive(philo->data) || !strncmp(activity_str, DEAD, 5))
-	{
-		current = get_current_millis();
-		printf("%dms %d %s \n", (int)(current - philo->thread_start), philo->num, activity_str);
-	}
-	pthread_mutex_unlock(&philo->data->mutex_write);
 }
 
 void    my_usleep(long long milli_sec)

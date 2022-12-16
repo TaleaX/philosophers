@@ -62,3 +62,15 @@ void	init_data(t_data *data, char **argv, int argc)
 		data->min_times_eaten = atoi(argv[5]);
 	data->philos = init_philo_data(data->total_num_philos, data);
 }
+
+void	init_routine(t_philo_data *philo)
+{
+	pthread_mutex_lock(&philo->data->mutex_write);
+    philo->thread_start = get_current_millis();
+	pthread_mutex_unlock(&philo->data->mutex_write);
+	pthread_mutex_lock(&philo->data->mutex_last_eaten);
+	philo->last_eaten = philo->thread_start;
+	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
+	if (philo->num % 2)
+		usleep(philo->data->time_to_eat);
+}

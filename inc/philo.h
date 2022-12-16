@@ -57,30 +57,27 @@ typedef struct s_data {
 
 //utils
 t_bool  	is_dead(t_philo_data *philo_data, int num);
-void    	unlock(t_bool *mutex);
-void    	lock(t_bool *mutex, t_philo_data *philo_data, int num);
-void    	do_activity(t_philo_data *philo_data, t_activity activity, char *activity_str);
-double		get_s(t_timeval time);
-void    my_usleep(long long milli_sec);
-void	output(t_philo_data *philo, char *activity_str);
-void	wait_for_death(t_data *data);
+void        my_usleep(long long milli_sec);
+
+void	    wait_for_death(t_data *data);
 long long	get_current_millis();
-int			get_diff_start(long long current, long long start);
-void		lock_right_fork(t_philo_data *philo_data);
-// void		take_fork_print(t_philo_data *philo_data);
-void		set_var(t_philo_data *philo_data, int *dest, int source);
-void	unlock_right_fork(t_philo_data *philo_data);
-int	ft_max(int num1, int num2);
-int	ft_min(int num1, int num2);
-void	exit_threads(t_data *data);
-t_bool	is_alive(t_data *data);
+int         ft_max(int num1, int num2);
+int         ft_min(int num1, int num2);
+void        exit_threads(t_data *data);
+t_bool      is_alive(t_data *data);
+void        init_routine(t_philo_data *philo);
+
+//activites
+void    philo_sleep(t_philo_data *philo);
+void    output(t_philo_data *philo, char *activity_str);
+void    philo_eat(t_philo_data *philo);
 
 //init
-void	init_data(t_data *data, char **argv, int argc);
+void        init_data(t_data *data, char **argv, int argc);
 long long   *create_time_arr(int num);
 pthread_t   *init_philos(int num);
 
 
-void    putstr_arg(char *str, long long arg, char c);
+// void    putstr_arg(char *str, long long arg, char c);
 
 #endif

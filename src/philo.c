@@ -64,44 +64,21 @@ void	wait_for_death(t_data *data)
 	}
 }
 
+
+
 void    *routine(void *content)
 {
     t_philo_data	*philo;
 
     philo = content;
-	pthread_mutex_lock(&philo->data->mutex_write);
-    philo->thread_start = get_current_millis();
-	pthread_mutex_unlock(&philo->data->mutex_write);
-	pthread_mutex_lock(&philo->data->mutex_last_eaten);
-	philo->last_eaten = philo->thread_start;
-	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
-	if (philo->num % 2)
-		usleep(philo->data->time_to_eat);
+	init_routine(philo);
     if (philo->data->total_num_philos > 1)
     {
         while (is_alive(philo->data))
         {
 			output(philo, THINK_STR);
-			pthread_mutex_lock(&philo->data->forks[philo->first_fork]);
-			output(philo, FORK_TAKEN);
-			pthread_mutex_lock(&philo->data->forks[philo->sec_fork]);
-			output(philo, FORK_TAKEN);
-			
-			pthread_mutex_lock(&philo->data->mutex_last_eaten);
-			philo->last_eaten = get_current_millis();
-			pthread_mutex_unlock(&philo->data->mutex_last_eaten);
-			output(philo, EAT_STR);
-			my_usleep(philo->data->time_to_eat);
-
-			pthread_mutex_lock(&philo->data->mutex_times_eaten);
-			philo->times_eaten++;
-			pthread_mutex_unlock(&philo->data->mutex_times_eaten);
-
-			pthread_mutex_unlock(&philo->data->forks[philo->sec_fork]);
-			pthread_mutex_unlock(&philo->data->forks[philo->first_fork]);
-	
-			output(philo, SLEEP_STR);
-			my_usleep(philo->data->time_to_sleep);
+			philo_eat(philo);
+			philo_sleep(philo);
         }
     }
     return (NULL);
