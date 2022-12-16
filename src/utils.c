@@ -3,29 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 09:17:34 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/14 14:34:05 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/16 11:35:51 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-long long	get_current_millis()
+long long	get_current_millis(void)
 {
-    t_timeval time;
+	t_timeval	time;
 
-    gettimeofday(&time, NULL);
+	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-
-
-
-// int	get_diff_start(long long current, long long start)
-// {
-// 	return (current - start);
-// }
 
 t_bool	is_alive(t_data *data)
 {
@@ -37,52 +30,25 @@ t_bool	is_alive(t_data *data)
 	return (alive);
 }
 
-void    my_usleep(long long milli_sec)
+void	my_usleep(long long milli_sec)
 {
-	long long end = get_current_millis() + milli_sec;
+	long long	end;
 
+	end = get_current_millis() + milli_sec;
 	while (get_current_millis() < end)
-		usleep(500);
+		usleep(100);
 }
 
 int	ft_min(int num1, int num2)
 {
-	return ((num1 < num2 ? num1 : num2));
+	if (num1 < num2)
+		return (num1);
+	return (num2);
 }
 
 int	ft_max(int num1, int num2)
 {
-	return ((num1 > num2 ? num1 : num2));
-}
-
-void	my_exit(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->total_num_philos)
-	{
-		pthread_join(data->philos[i].philo, NULL);
-		i++;
-	}
-	i = 0;
-	while (i < data->total_num_philos)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&data->mutex_times_eaten);
-	pthread_mutex_destroy(&data->mutex_last_eaten);
-	pthread_mutex_destroy(&data->mutex_alive);
-	pthread_mutex_destroy(&data->mutex_write);
-	free(data->forks);
-	free(data->philos);
-}
-
-void	die(t_data *data)
-{
-	pthread_mutex_lock(&data->mutex_alive);
-	data->alive = FALSE;
-	pthread_mutex_unlock(&data->mutex_alive);
-	output(&data->philos[0], DEAD);
+	if (num1 > num2)
+		return (num1);
+	return (num2);
 }
