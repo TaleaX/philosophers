@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 09:16:58 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/16 11:32:27 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/16 12:08:59 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
-	if (argc >= 5 && atoi(argv[1]) > 0)
+	if (ft_atoi(argv[1]) <= 0)
+		printf("The number of Philos you entered is 0 or smaller, try again\n");
+	else if (check_input(argv, argc))
 	{
 		init_data(&data, argv, argc);
 		i = 0;
@@ -97,5 +99,8 @@ int	main(int argc, char **argv)
 		wait_for_death(&data);
 		my_exit(&data);
 	}
+	else
+		printf("Args: number_of_philosophers time_to_die time_to_eat" \
+			"time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
 	return (EXIT_SUCCESS);
 }

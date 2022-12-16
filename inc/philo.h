@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 11:19:24 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/16 11:33:31 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/16 12:00:13 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define THINK_STR "is thinking \U0001F4AD"
 # define FORK_TAKEN "has taken a fork \U0001F962"
 # define DEAD "died"
+# define GT_MAX_INT 2147483648
 
 typedef struct timeval	t_timeval;
 typedef int				t_bool;
@@ -87,5 +88,9 @@ void		philo_eat(t_philo_data *philo);
 void		init_data(t_data *data, char **argv, int argc);
 long long	*create_time_arr(int num);
 pthread_t	*init_philos(int num);
+t_bool		check_input(char **argv, int argc);
+
+//ft_atoi
+long long	ft_atoi(const char *nptr);
 
 #endif

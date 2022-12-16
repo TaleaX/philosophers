@@ -6,7 +6,7 @@
 /*   By: dantonik <dantonik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 11:10:29 by dantonik          #+#    #+#             */
-/*   Updated: 2022/12/16 11:11:15 by dantonik         ###   ########.fr       */
+/*   Updated: 2022/12/16 12:03:34 by dantonik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,16 @@ void	init_routine(t_philo_data *philo)
 	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
 	if (philo->num % 2)
 		usleep(philo->data->time_to_eat);
+}
+
+t_bool	check_input(char **argv, int argc)
+{
+	if (argc < 5 || argc > 6)
+		return (FALSE);
+	while (--argc > 0)
+	{
+		if (ft_atoi(argv[argc]) == GT_MAX_INT)
+			return (FALSE);
+	}
+	return (TRUE);
 }
