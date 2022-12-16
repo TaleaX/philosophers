@@ -55,7 +55,7 @@ int	ft_max(int num1, int num2)
 	return ((num1 > num2 ? num1 : num2));
 }
 
-void	exit_threads(t_data *data)
+void	my_exit(t_data *data)
 {
 	int	i;
 
@@ -77,4 +77,12 @@ void	exit_threads(t_data *data)
 	pthread_mutex_destroy(&data->mutex_write);
 	free(data->forks);
 	free(data->philos);
+}
+
+void	die(t_data *data)
+{
+	pthread_mutex_lock(&data->mutex_alive);
+	data->alive = FALSE;
+	pthread_mutex_unlock(&data->mutex_alive);
+	output(&data->philos[0], DEAD);
 }

@@ -63,9 +63,10 @@ void	    wait_for_death(t_data *data);
 long long	get_current_millis();
 int         ft_max(int num1, int num2);
 int         ft_min(int num1, int num2);
-void        exit_threads(t_data *data);
+void        my_exit(t_data *data);
 t_bool      is_alive(t_data *data);
 void        init_routine(t_philo_data *philo);
+void	die(t_data *data);
 
 //activites
 void    philo_sleep(t_philo_data *philo);
