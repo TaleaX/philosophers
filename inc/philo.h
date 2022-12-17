@@ -71,6 +71,7 @@ long long	get_current_millis(void);
 int			get_forks_i(int philo_num, int total_philos, t_bool first_fork);
 t_bool		is_alive(t_data *data);
 void		init_routine(t_philo_data *philo);
+int			ft_strncmp(char *s1, char *s2, unsigned int n);
 
 //end
 void		exit_threads(t_data *data);
