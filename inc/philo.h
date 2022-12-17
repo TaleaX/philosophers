@@ -68,8 +68,7 @@ typedef struct s_data {
 t_bool		is_dead(t_philo_data *philo_data, int num);
 void		my_usleep(long long milli_sec);
 long long	get_current_millis(void);
-int			ft_max(int num1, int num2);
-int			ft_min(int num1, int num2);
+int			get_forks_i(int philo_num, int total_philos, t_bool first_fork);
 t_bool		is_alive(t_data *data);
 void		init_routine(t_philo_data *philo);
 

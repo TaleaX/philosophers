@@ -49,8 +49,8 @@ int	wait_for_death(t_data *data)
 		while (i < data->total_num_philos)
 		{
 			full = philos_full(data, full, i);
-			current = get_current_millis();
 			last_eaten = time_last_eaten(data, i);
+			current = get_current_millis();
 			if (last_eaten && (current - last_eaten > data->time_to_die))
 				return (die(data, i), EXIT_SUCCESS);
 			if (full == data->total_num_philos)

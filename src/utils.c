@@ -36,19 +36,19 @@ void	my_usleep(long long milli_sec)
 
 	end = get_current_millis() + milli_sec;
 	while (get_current_millis() < end)
-		usleep(100);
+		usleep(500);
 }
 
-int	ft_min(int num1, int num2)
+int	get_forks_i(int philo_num, int total_philos, t_bool first_fork)
 {
-	if (num1 < num2)
-		return (num1);
-	return (num2);
-}
-
-int	ft_max(int num1, int num2)
-{
-	if (num1 > num2)
-		return (num1);
-	return (num2);
+	if (first_fork)
+	{
+		if (philo_num % 2 == 0)
+			return (philo_num);
+		else
+			return ((philo_num + 1) % total_philos);
+	}
+	if (philo_num % 2 == 0)
+			return ((philo_num + 1) % total_philos);
+	return (philo_num);
 }
