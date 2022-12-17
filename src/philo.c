@@ -43,7 +43,7 @@ int	wait_for_death(t_data *data)
 	{	
 		i = 0;
 		full = 0;
-		usleep(90);
+		usleep(100);
 		if (data->total_num_philos == 1)
 			return (die(data, 0), EXIT_SUCCESS);
 		while (i < data->total_num_philos)
