@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:11 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/16 12:47:01 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/18 10:36:48 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		philo_data[i].last_eaten = 0;
 		philo_data[i].data = data;
 		philo_data[i].num = i;
-		// philo_data[i].first_fork = (i % 2 == 0) ? i : (i + 1) % len;
-		// philo_data[i].sec_fork = (i % 2 == 0) ? (i + 1) % len : i;
 		philo_data[i].first_fork = get_forks_i(i, len, TRUE);
 		philo_data[i].sec_fork = get_forks_i(i, len, FALSE);
 		philo_data[i].times_eaten = 0;

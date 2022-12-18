@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:22:22 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/16 12:22:24 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/18 12:12:53 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_data {
 }	t_data;
 
 //utils
-t_bool		is_dead(t_philo_data *philo_data, int num);
 void		my_usleep(long long milli_sec);
 long long	get_current_millis(void);
 int			get_forks_i(int philo_num, int total_philos, t_bool first_fork);
@@ -77,6 +76,8 @@ int			ft_strncmp(char *s1, char *s2, unsigned int n);
 //end
 void		exit_threads(t_data *data);
 void		my_exit(t_data *data);
+int			wait_for_death(t_data *data);
+
 // void		wait_for_death(t_data *data);
 void		die(t_data *data, int i);
 

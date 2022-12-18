@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:30 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/16 12:30:49 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/18 12:21:00 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	my_usleep(long long milli_sec)
 
 	end = get_current_millis() + milli_sec;
 	while (get_current_millis() < end)
-		usleep(500);
+		usleep(550);
 }
 
 int	get_forks_i(int philo_num, int total_philos, t_bool first_fork)
@@ -49,7 +49,7 @@ int	get_forks_i(int philo_num, int total_philos, t_bool first_fork)
 			return ((philo_num + 1) % total_philos);
 	}
 	if (philo_num % 2 == 0)
-			return ((philo_num + 1) % total_philos);
+		return ((philo_num + 1) % total_philos);
 	return (philo_num);
 }
 
