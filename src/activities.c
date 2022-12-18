@@ -22,10 +22,10 @@ void	philo_eat(t_philo_data *philo)
 		pthread_mutex_lock(&philo->data->mutex_last_eaten);
 		philo->last_eaten = get_current_millis();
 		pthread_mutex_unlock(&philo->data->mutex_last_eaten);
-		// pthread_mutex_lock(&data->mutex_alive);
+		pthread_mutex_lock(&philo->mutex_eat);
 		output(philo, EAT_STR);
 		my_usleep(philo->data->time_to_eat);
-		// pthread_mutex_lock(&data->mutex_alive);
+		pthread_mutex_unlock(&philo->mutex_eat);
 		pthread_mutex_lock(&philo->data->mutex_times_eaten);
 		philo->times_eaten++;
 		pthread_mutex_unlock(&philo->data->mutex_times_eaten);

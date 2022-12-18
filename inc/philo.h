@@ -46,6 +46,7 @@ typedef struct s_philo_data {
 	int				first_fork;
 	int				sec_fork;
 	int				times_eaten;
+	pthread_mutex_t	mutex_eat;
 	struct s_data	*data;
 }	t_philo_data;
 

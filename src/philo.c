@@ -48,9 +48,11 @@ int	wait_for_death(t_data *data)
 			return (die(data, 0), EXIT_SUCCESS);
 		while (i < data->total_num_philos)
 		{
+			pthread_mutex_lock(&data->philos[i].mutex_eat);
 			full = philos_full(data, full, i);
 			last_eaten = time_last_eaten(data, i);
 			current = get_current_millis();
+			pthread_mutex_unlock(&data->philos[i].mutex_eat);
 			if (last_eaten && (current - last_eaten > data->time_to_die))
 				return (die(data, i), EXIT_SUCCESS);
 			if (full == data->total_num_philos)

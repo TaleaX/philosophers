@@ -49,6 +49,7 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		philo_data[i].first_fork = get_forks_i(i, len, TRUE);
 		philo_data[i].sec_fork = get_forks_i(i, len, FALSE);
 		philo_data[i].times_eaten = 0;
+		pthread_mutex_init(&philo_data[i].mutex_eat, NULL);
 		i++;
 	}
 	return (philo_data);
