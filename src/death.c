@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 10:57:17 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/18 12:22:41 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/20 11:37:55 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,24 @@ static int	philos_full(t_data *data, int philos_full, int i)
 	return (philos_full);
 }
 
-// static t_bool	is_dead(t_data *data, int i)
-// {
-// 	long long	current;
-// 	long long	last_eaten;
+static t_bool	is_dead(t_data *data, int i)
+{
+	long long	current;
+	long long	last_eaten;
 
-// 	pthread_mutex_lock(&data->mutex_last_eaten);
-// 	last_eaten = data->philos[i].last_eaten;
-// 	current = get_current_millis();
-// 	if (last_eaten && (current - last_eaten > data->time_to_die))
-// 		return (TRUE);
-// 	pthread_mutex_unlock(&data->mutex_last_eaten);
-// 	return (FALSE);
-// }
+	pthread_mutex_lock(&data->mutex_last_eaten);
+	last_eaten = data->philos[i].last_eaten;
+	pthread_mutex_unlock(&data->mutex_last_eaten);
+	current = get_current_millis();
+	if (last_eaten && (current - last_eaten >= data->time_to_die))
+		return (TRUE);
+	return (FALSE);
+}
 
 int	wait_for_death(t_data *data)
 {
 	int			i;
 	int			full;
-	long long	current;
-	long long	last_eaten;
 
 	while (1)
 	{	
@@ -52,17 +50,11 @@ int	wait_for_death(t_data *data)
 			return (my_usleep(data->time_to_die), die(data, 0), EXIT_SUCCESS);
 		while (i < data->total_num_philos)
 		{
-			pthread_mutex_lock(&data->mutex_last_eaten);
-			last_eaten = data->philos[i].last_eaten;
-			pthread_mutex_unlock(&data->mutex_last_eaten);
-			current = get_current_millis();
-			full = philos_full(data, full, i);
-			if (last_eaten && (current - last_eaten > data->time_to_die))
+			if (is_dead(data, i))
 				return (die(data, i), EXIT_SUCCESS);
+			full = philos_full(data, full, i);
 			if (full == data->total_num_philos)
 				return (exit_threads(data), EXIT_SUCCESS);
-			// if (is_dead(data, i))
-			// 	return (die(data, i), EXIT_SUCCESS);
 			i++;
 		}
 	}

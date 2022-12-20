@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:22:22 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/18 12:12:53 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/20 09:42:43 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 
 # define TRUE 1
 # define FALSE 0
-# define EAT_STR "is eating \U0001F35B"
-# define SLEEP_STR "is sleeping \U0001F4A4"
-# define THINK_STR "is thinking \U0001F4AD"
-# define FORK_TAKEN "has taken a fork \U0001F962"
+# define EAT_STR "is eating"// \U0001F35B"
+# define SLEEP_STR "is sleeping"// \U0001F4A4"
+# define THINK_STR "is thinking"// \U0001F4AD"
+# define FORK_TAKEN "has taken a fork"// \U0001F962"
 # define DEAD "died"
 # define GT_MAX_INT 2147483648
 

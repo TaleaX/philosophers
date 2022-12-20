@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:20 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/18 11:12:32 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/20 10:04:26 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
-	if (ft_atoi(argv[1]) <= 0)
+	if (argv[1] && ft_atoi(argv[1]) <= 0)
 		printf("The number of Philos you entered is 0 or smaller, try again\n");
 	else if (check_input(argv, argc))
 	{

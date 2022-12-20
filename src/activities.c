@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:20:42 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/18 11:41:16 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/20 09:42:14 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	output(t_philo_data *philo, char *activity_str)
 	if (is_alive(philo->data) || !ft_strncmp(activity_str, DEAD, 5))
 	{
 		current = get_current_millis();
-		printf("%dms %d %s \n", (int)(current - philo->thread_start), \
+		printf("%d %d %s \n", (int)(current - philo->thread_start), \
 				philo->num, activity_str);
 	}
 	pthread_mutex_unlock(&philo->data->mutex_write);
