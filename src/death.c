@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 10:57:17 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 11:37:55 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/21 13:24:08 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ static int	philos_full(t_data *data, int philos_full, int i)
 	return (philos_full);
 }
 
-static t_bool	is_dead(t_data *data, int i)
+t_bool	is_dead(t_data *data, int i)
 {
 	long long	current;
 	long long	last_eaten;
 
 	pthread_mutex_lock(&data->mutex_last_eaten);
 	last_eaten = data->philos[i].last_eaten;
-	pthread_mutex_unlock(&data->mutex_last_eaten);
 	current = get_current_millis();
 	if (last_eaten && (current - last_eaten >= data->time_to_die))
-		return (TRUE);
+		return (pthread_mutex_unlock(&data->mutex_last_eaten), TRUE);
+	pthread_mutex_unlock(&data->mutex_last_eaten);
 	return (FALSE);
 }
 
@@ -45,9 +45,8 @@ int	wait_for_death(t_data *data)
 	{	
 		i = 0;
 		full = 0;
-		usleep(100);
 		if (data->total_num_philos == 1)
-			return (my_usleep(data->time_to_die), die(data, 0), EXIT_SUCCESS);
+			return (my_msleep(data->time_to_die), die(data, 0), EXIT_SUCCESS);
 		while (i < data->total_num_philos)
 		{
 			if (is_dead(data, i))
@@ -57,6 +56,7 @@ int	wait_for_death(t_data *data)
 				return (exit_threads(data), EXIT_SUCCESS);
 			i++;
 		}
+		usleep(90);
 	}
 	return (EXIT_FAILURE);
 }

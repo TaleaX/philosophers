@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:11 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 11:33:41 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/21 13:19:09 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ void	init_data(t_data *data, char **argv, int argc)
 void	init_routine(t_philo_data *philo)
 {
 	pthread_mutex_lock(&philo->data->mutex_last_eaten);
-	philo->last_eaten = philo->thread_start;
+	philo->last_eaten = get_current_millis();
 	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
 	if (philo->num % 2 != 0)
-		usleep(philo->data->time_to_eat * 1000 + 1000);
+		my_msleep(philo->data->time_to_eat);
 }
 
 t_bool	check_input(char **argv, int argc)

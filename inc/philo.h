@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:22:22 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 09:42:43 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/21 13:06:23 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <sys/time.h>
+# include <math.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -66,7 +67,7 @@ typedef struct s_data {
 }	t_data;
 
 //utils
-void		my_usleep(long long milli_sec);
+void		my_msleep(long long milli_sec);
 long long	get_current_millis(void);
 int			get_forks_i(int philo_num, int total_philos, t_bool first_fork);
 t_bool		is_alive(t_data *data);
@@ -77,6 +78,7 @@ int			ft_strncmp(char *s1, char *s2, unsigned int n);
 void		exit_threads(t_data *data);
 void		my_exit(t_data *data);
 int			wait_for_death(t_data *data);
+t_bool		is_dead(t_data *data, int i);
 
 // void		wait_for_death(t_data *data);
 void		die(t_data *data, int i);

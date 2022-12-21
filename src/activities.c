@@ -6,11 +6,23 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:20:42 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 09:42:14 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/21 13:06:23 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+t_bool	wtf(t_data *data, int i)
+{
+	long long	current;
+	long long	last_eaten;
+
+	last_eaten = data->philos[i].last_eaten;
+	current = get_current_millis();
+	if (last_eaten && (current - last_eaten >= data->time_to_die))
+		return (TRUE);
+	return (FALSE);
+}
 
 void	philo_eat(t_philo_data *philo)
 {
@@ -23,7 +35,7 @@ void	philo_eat(t_philo_data *philo)
 		philo->last_eaten = get_current_millis();
 		pthread_mutex_unlock(&philo->data->mutex_last_eaten);
 		output(philo, EAT_STR);
-		my_usleep(philo->data->time_to_eat);
+		my_msleep(philo->data->time_to_eat);
 		pthread_mutex_lock(&philo->data->mutex_times_eaten);
 		philo->times_eaten++;
 		pthread_mutex_unlock(&philo->data->mutex_times_eaten);
@@ -35,7 +47,7 @@ void	philo_eat(t_philo_data *philo)
 void	philo_sleep(t_philo_data *philo)
 {
 	output(philo, SLEEP_STR);
-	my_usleep(philo->data->time_to_sleep);
+	my_msleep(philo->data->time_to_sleep);
 }
 
 void	output(t_philo_data *philo, char *activity_str)
