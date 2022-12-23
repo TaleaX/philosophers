@@ -26,12 +26,15 @@ void	my_exit(t_data *data)
 	while (i < data->total_num_philos)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philos[i].mutex_last_eaten);
+		pthread_mutex_destroy(&data->philos[i].mutex_times_eaten);
 		i++;
 	}
-	pthread_mutex_destroy(&data->mutex_times_eaten);
-	pthread_mutex_destroy(&data->mutex_last_eaten);
+	
 	pthread_mutex_destroy(&data->mutex_alive);
 	pthread_mutex_destroy(&data->mutex_write);
+	// pthread_mutex_destroy(&data->mutex_last_eaten);
+	// pthread_mutex_destroy(&data->mutex_times_eaten);
 	free(data->forks);
 	free(data->philos);
 }

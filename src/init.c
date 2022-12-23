@@ -44,10 +44,16 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		philo_data[i].last_eaten = 0;
 		philo_data[i].data = data;
 		philo_data[i].num = i;
-		philo_data[i].first_fork = get_forks_i(i, len, TRUE);
-		philo_data[i].sec_fork = get_forks_i(i, len, FALSE);
+		// philo_data[i].first_fork = get_forks_i(i, len, TRUE);
+		// philo_data[i].sec_fork = get_forks_i(i, len, FALSE);
+		philo_data[i].first_fork = (i == len - 1) ? ((i + 1) % len) : i;
+		philo_data[i].sec_fork = (i == len - 1) ? i : ((i + 1) % len);
+		// philo_data[i].first_fork = i;
+		// philo_data[i].sec_fork = ((i + 1) % len);
 		philo_data[i].times_eaten = 0;
 		pthread_mutex_init(&philo_data[i].mutex_eat, NULL);
+		pthread_mutex_init(&philo_data[i].mutex_last_eaten, NULL);
+		pthread_mutex_init(&philo_data[i].mutex_times_eaten, NULL);
 		i++;
 	}
 	return (philo_data);
@@ -60,10 +66,9 @@ void	init_data(t_data *data, char **argv, int argc)
 	data->time_to_eat = atoi(argv[3]);
 	data->time_to_sleep = atoi(argv[4]);
 	data->alive = TRUE;
+	data->threads_start = FALSE;
 	data->forks = create_forks(atoi(argv[1]));
-	pthread_mutex_init(&data->mutex_times_eaten, NULL);
 	pthread_mutex_init(&data->mutex_write, NULL);
-	pthread_mutex_init(&data->mutex_last_eaten, NULL);
 	pthread_mutex_init(&data->mutex_alive, NULL);
 	data->min_times_eaten = -1;
 	if (argc > 5)
@@ -73,11 +78,11 @@ void	init_data(t_data *data, char **argv, int argc)
 
 void	init_routine(t_philo_data *philo)
 {
-	pthread_mutex_lock(&philo->data->mutex_last_eaten);
+	pthread_mutex_lock(&philo->mutex_last_eaten);
 	philo->last_eaten = get_current_millis();
-	pthread_mutex_unlock(&philo->data->mutex_last_eaten);
+	pthread_mutex_unlock(&philo->mutex_last_eaten);
 	if (philo->num % 2 != 0)
-		my_msleep(philo->data->time_to_eat);
+		my_msleep(philo->data->time_to_eat + 1);
 }
 
 t_bool	check_input(char **argv, int argc)

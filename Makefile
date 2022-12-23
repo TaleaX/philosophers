@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall# -fsanitize=thread -g
+CFLAGS		=	-pthread#-Werror -Wextra -Wall# -fsanitize=thread -g
 
 BOLD	= \033[1m
 BLACK	= \033[30;1m

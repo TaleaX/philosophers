@@ -31,14 +31,15 @@ void	philo_eat(t_philo_data *philo)
 	pthread_mutex_lock(&philo->data->forks[philo->sec_fork]);
 	output(philo, FORK_TAKEN);
 	{
-		pthread_mutex_lock(&philo->data->mutex_last_eaten);
+		pthread_mutex_lock(&philo->mutex_last_eaten);
 		philo->last_eaten = get_current_millis();
-		pthread_mutex_unlock(&philo->data->mutex_last_eaten);
+		pthread_mutex_unlock(&philo->mutex_last_eaten);
 		output(philo, EAT_STR);
 		my_msleep(philo->data->time_to_eat);
-		pthread_mutex_lock(&philo->data->mutex_times_eaten);
+		philo->eating_rot = 0;
+		pthread_mutex_lock(&philo->mutex_times_eaten);
 		philo->times_eaten++;
-		pthread_mutex_unlock(&philo->data->mutex_times_eaten);
+		pthread_mutex_unlock(&philo->mutex_times_eaten);
 	}
 	pthread_mutex_unlock(&philo->data->forks[philo->sec_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->first_fork]);
@@ -58,6 +59,7 @@ void	output(t_philo_data *philo, char *activity_str)
 	if (is_alive(philo->data) || !ft_strncmp(activity_str, DEAD, 5))
 	{
 		current = get_current_millis();
+		// write(1, "lol\n", 4);
 		printf("%d %d %s \n", (int)(current - philo->thread_start), \
 				philo->num, activity_str);
 	}

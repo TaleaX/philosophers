@@ -14,11 +14,11 @@
 
 static int	philos_full(t_data *data, int philos_full, int i)
 {
-	pthread_mutex_lock(&data->mutex_times_eaten);
+	pthread_mutex_lock(&data->philos[i].mutex_times_eaten);
 	if (data->min_times_eaten != -1
 		&& data->philos[i].times_eaten >= data->min_times_eaten)
 		philos_full++;
-	pthread_mutex_unlock(&data->mutex_times_eaten);
+	pthread_mutex_unlock(&data->philos[i].mutex_times_eaten);
 	return (philos_full);
 }
 
@@ -27,12 +27,12 @@ t_bool	is_dead(t_data *data, int i)
 	long long	current;
 	long long	last_eaten;
 
-	pthread_mutex_lock(&data->mutex_last_eaten);
-	last_eaten = data->philos[i].last_eaten;
+	pthread_mutex_lock(&data->philos[i].mutex_last_eaten);
 	current = get_current_millis();
+	last_eaten = data->philos[i].last_eaten;
 	if (last_eaten && (current - last_eaten >= data->time_to_die))
-		return (pthread_mutex_unlock(&data->mutex_last_eaten), TRUE);
-	pthread_mutex_unlock(&data->mutex_last_eaten);
+		return (pthread_mutex_unlock(&data->philos[i].mutex_last_eaten), TRUE);
+	pthread_mutex_unlock(&data->philos[i].mutex_last_eaten);
 	return (FALSE);
 }
 
@@ -56,7 +56,7 @@ int	wait_for_death(t_data *data)
 				return (exit_threads(data), EXIT_SUCCESS);
 			i++;
 		}
-		usleep(90);
+		usleep(100);
 	}
 	return (EXIT_FAILURE);
 }
