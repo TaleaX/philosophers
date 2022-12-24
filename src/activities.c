@@ -12,18 +12,6 @@
 
 #include "../inc/philo.h"
 
-t_bool	wtf(t_data *data, int i)
-{
-	long long	current;
-	long long	last_eaten;
-
-	last_eaten = data->philos[i].last_eaten;
-	current = get_current_millis();
-	if (last_eaten && (current - last_eaten >= data->time_to_die))
-		return (TRUE);
-	return (FALSE);
-}
-
 void	philo_eat(t_philo_data *philo)
 {
 	pthread_mutex_lock(&philo->data->forks[philo->first_fork]);

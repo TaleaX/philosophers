@@ -44,15 +44,10 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		philo_data[i].last_eaten = 0;
 		philo_data[i].data = data;
 		philo_data[i].num = i;
-		// philo_data[i].first_fork = get_forks_i(i, len, TRUE);
-		// philo_data[i].sec_fork = get_forks_i(i, len, FALSE);
 		philo_data[i].first_fork = (i == len - 1) ? ((i + 1) % len) : i;
 		philo_data[i].sec_fork = (i == len - 1) ? i : ((i + 1) % len);
-		// philo_data[i].first_fork = i;
-		// philo_data[i].sec_fork = ((i + 1) % len);
 		philo_data[i].times_eaten = 0;
 		philo_data[i].rotate_count = (i % 2 == 0) ? data->total_num_philos - i - 1 : data->total_num_philos - i - 2;
-
 		pthread_mutex_init(&philo_data[i].mutex_last_eaten, NULL);
 		pthread_mutex_init(&philo_data[i].mutex_times_eaten, NULL);
 		i++;

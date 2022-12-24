@@ -33,8 +33,6 @@ void	my_exit(t_data *data)
 	
 	pthread_mutex_destroy(&data->mutex_alive);
 	pthread_mutex_destroy(&data->mutex_write);
-	// pthread_mutex_destroy(&data->mutex_last_eaten);
-	// pthread_mutex_destroy(&data->mutex_times_eaten);
 	free(data->forks);
 	free(data->philos);
 }
