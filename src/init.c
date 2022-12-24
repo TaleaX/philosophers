@@ -51,7 +51,8 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		// philo_data[i].first_fork = i;
 		// philo_data[i].sec_fork = ((i + 1) % len);
 		philo_data[i].times_eaten = 0;
-		pthread_mutex_init(&philo_data[i].mutex_eat, NULL);
+		philo_data[i].rotate_count = (i % 2 == 0) ? data->total_num_philos - i - 1 : data->total_num_philos - i - 2;
+
 		pthread_mutex_init(&philo_data[i].mutex_last_eaten, NULL);
 		pthread_mutex_init(&philo_data[i].mutex_times_eaten, NULL);
 		i++;
@@ -81,8 +82,10 @@ void	init_routine(t_philo_data *philo)
 	pthread_mutex_lock(&philo->mutex_last_eaten);
 	philo->last_eaten = get_current_millis();
 	pthread_mutex_unlock(&philo->mutex_last_eaten);
+	if (philo->data->total_num_philos > 1)
+		output(philo, THINK_STR);
 	if (philo->num % 2 != 0)
-		my_msleep(philo->data->time_to_eat + 1);
+		my_msleep(philo->data->time_to_eat);
 }
 
 t_bool	check_input(char **argv, int argc)

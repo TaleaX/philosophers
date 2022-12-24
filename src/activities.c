@@ -36,7 +36,7 @@ void	philo_eat(t_philo_data *philo)
 		pthread_mutex_unlock(&philo->mutex_last_eaten);
 		output(philo, EAT_STR);
 		my_msleep(philo->data->time_to_eat);
-		philo->eating_rot = 0;
+		philo->rotate_count--;
 		pthread_mutex_lock(&philo->mutex_times_eaten);
 		philo->times_eaten++;
 		pthread_mutex_unlock(&philo->mutex_times_eaten);
@@ -49,6 +49,7 @@ void	philo_sleep(t_philo_data *philo)
 {
 	output(philo, SLEEP_STR);
 	my_msleep(philo->data->time_to_sleep);
+	philo->rotate_count--;
 }
 
 void	output(t_philo_data *philo, char *activity_str)
@@ -59,7 +60,6 @@ void	output(t_philo_data *philo, char *activity_str)
 	if (is_alive(philo->data) || !ft_strncmp(activity_str, DEAD, 5))
 	{
 		current = get_current_millis();
-		// write(1, "lol\n", 4);
 		printf("%d %d %s \n", (int)(current - philo->thread_start), \
 				philo->num, activity_str);
 	}

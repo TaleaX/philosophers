@@ -49,7 +49,7 @@ typedef struct s_philo_data {
 	int				times_eaten;
 	int				eating_rot;
 	int				prev_time;
-	pthread_mutex_t	mutex_eat;
+	int				rotate_count;
 	pthread_mutex_t	mutex_last_eaten;
 	pthread_mutex_t	mutex_times_eaten;
 	struct s_data	*data;

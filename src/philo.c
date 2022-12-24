@@ -12,15 +12,6 @@
 
 #include "../inc/philo.h"
 
-static t_bool	can_eat(t_philo_data *philo)
-{
-	if (philo->data->total_num_philos % 2 == 0)
-		return (TRUE);
-	if (philo->eating_rot == 1)
-		return (printf("philos %d eating rot is 1\n", philo->num), TRUE);
-	return (FALSE);
-}
-
 void	*routine(void *content)
 {
 	t_philo_data	*philo;
@@ -32,12 +23,12 @@ void	*routine(void *content)
 	{
 		while (is_alive(philo->data))
 		{
-			philo->prev_time = get_current_millis();
 			output(philo, THINK_STR);
-			if (get_current_millis() - philo->prev_time >= philo->data->time_to_eat - 1)
-				philo->eating_rot = 1;
-			if (!can_eat(philo))
-				usleep(200);
+			if (philo->data->total_num_philos %2 != 0 && philo->rotate_count == 0)
+			{
+				my_msleep(philo->data->time_to_eat);
+				philo->rotate_count = philo->data->total_num_philos - 1;
+			}
 			philo_eat(philo);
 			philo_sleep(philo);
 		}
