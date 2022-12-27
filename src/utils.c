@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:30 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/21 13:06:23 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:47:07 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@ long long	get_current_millis(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-t_bool	is_alive(t_data *data)
-{
-	t_bool	alive;
-
-	pthread_mutex_lock(&data->mutex_alive);
-	alive = data->alive;
-	pthread_mutex_unlock(&data->mutex_alive);
-	return (alive);
-}
-
 void	my_msleep(long long milli_sec)
 {
 	long long	end;
@@ -37,20 +27,6 @@ void	my_msleep(long long milli_sec)
 	end = get_current_millis() + milli_sec;
 	while (get_current_millis() < end)
 		usleep(500);
-}
-
-int	get_forks_i(int philo_num, int total_philos, t_bool first_fork)
-{
-	if (first_fork)
-	{
-		if (philo_num % 2 == 0)
-			return (philo_num);
-		else
-			return ((philo_num + 1) % total_philos);
-	}
-	if (philo_num % 2 == 0)
-		return ((philo_num + 1) % total_philos);
-	return (philo_num);
 }
 
 int	ft_strncmp(char *s1, char *s2, unsigned int n)
@@ -69,4 +45,18 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_max(int first, int sec)
+{
+	if (first > sec)
+		return (first);
+	return (sec);
+}
+
+int	ft_min(int first, int sec)
+{
+	if (first < sec)
+		return (first);
+	return (sec);
 }

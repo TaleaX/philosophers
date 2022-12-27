@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:11 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/21 13:19:09 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:45:52 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 		philo_data[i].last_eaten = 0;
 		philo_data[i].data = data;
 		philo_data[i].num = i;
-		philo_data[i].first_fork = (i == len - 1) ? ((i + 1) % len) : i;
-		philo_data[i].sec_fork = (i == len - 1) ? i : ((i + 1) % len);
+		philo_data[i].first_fork = ft_min(i, (i + 1) % len);
+		philo_data[i].sec_fork = ft_max(i, (i + 1) % len);
 		philo_data[i].times_eaten = 0;
-		philo_data[i].rotate_count = (i % 2 == 0) ? data->total_num_philos - i - 1 : data->total_num_philos - i - 2;
+		if (i % 2 == 0)
+			philo_data[i].rotate_count = data->total_num_philos - i - 1;
+		else
+			philo_data[i].rotate_count = data->total_num_philos - i - 2;
 		pthread_mutex_init(&philo_data[i].mutex_last_eaten, NULL);
 		pthread_mutex_init(&philo_data[i].mutex_times_eaten, NULL);
 		i++;

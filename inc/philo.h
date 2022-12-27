@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:22:22 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/21 13:06:23 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:40:51 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ typedef struct s_data {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	mutex_alive;
 	pthread_mutex_t	mutex_write;
-	// pthread_mutex_t	mutex_last_eaten;
-	// pthread_mutex_t	mutex_times_eaten;
 	int				time_to_sleep;
 	int				time_to_die;
 	int				time_to_eat;
@@ -78,6 +76,8 @@ int			get_forks_i(int philo_num, int total_philos, t_bool first_fork);
 t_bool		is_alive(t_data *data);
 void		init_routine(t_philo_data *philo);
 int			ft_strncmp(char *s1, char *s2, unsigned int n);
+int			ft_max(int first, int sec);
+int			ft_min(int first, int sec);
 
 //end
 void		exit_threads(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:20:53 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 09:30:18 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:46:31 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	my_exit(t_data *data)
 		pthread_mutex_destroy(&data->philos[i].mutex_times_eaten);
 		i++;
 	}
-	
 	pthread_mutex_destroy(&data->mutex_alive);
 	pthread_mutex_destroy(&data->mutex_write);
 	free(data->forks);

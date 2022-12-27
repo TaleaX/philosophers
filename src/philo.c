@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:20 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/20 10:04:26 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:46:16 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	*routine(void *content)
 {
 	t_philo_data	*philo;
 
-
 	philo = content;
 	init_routine(philo);
 	if (philo->data->total_num_philos > 1)
@@ -24,7 +23,8 @@ void	*routine(void *content)
 		while (is_alive(philo->data))
 		{
 			output(philo, THINK_STR);
-			if (philo->data->total_num_philos %2 != 0 && philo->rotate_count == 0)
+			if (philo->data->total_num_philos % 2 != 0
+				&& philo->rotate_count == 0)
 			{
 				my_msleep(philo->data->time_to_eat);
 				philo->rotate_count = philo->data->total_num_philos - 1;

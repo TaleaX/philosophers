@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 10:57:17 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/21 13:24:08 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:48:13 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ static int	philos_full(t_data *data, int philos_full, int i)
 		philos_full++;
 	pthread_mutex_unlock(&data->philos[i].mutex_times_eaten);
 	return (philos_full);
+}
+
+t_bool	is_alive(t_data *data)
+{
+	t_bool	alive;
+
+	pthread_mutex_lock(&data->mutex_alive);
+	alive = data->alive;
+	pthread_mutex_unlock(&data->mutex_alive);
+	return (alive);
 }
 
 t_bool	is_dead(t_data *data, int i)
@@ -46,17 +56,17 @@ int	wait_for_death(t_data *data)
 		i = 0;
 		full = 0;
 		if (data->total_num_philos == 1)
-			return (my_msleep(data->time_to_die), die(data, 0), EXIT_SUCCESS);
+			return (my_msleep(data->time_to_die), die(data, 0), 1);
 		while (i < data->total_num_philos)
 		{
 			if (is_dead(data, i))
-				return (die(data, i), EXIT_SUCCESS);
+				return (die(data, i), 1);
 			full = philos_full(data, full, i);
 			if (full == data->total_num_philos)
-				return (exit_threads(data), EXIT_SUCCESS);
+				return (exit_threads(data), 1);
 			i++;
 		}
 		usleep(100);
 	}
-	return (EXIT_FAILURE);
+	return (0);
 }
