@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:20 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/27 17:46:16 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/28 14:04:59 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*routine(void *content)
 			if (philo->data->total_num_philos % 2 != 0
 				&& philo->rotate_count == 0)
 			{
-				my_msleep(philo->data->time_to_eat);
+				my_msleep(philo->data->time_to_eat, philo->data);
 				philo->rotate_count = philo->data->total_num_philos - 1;
 			}
 			philo_eat(philo);

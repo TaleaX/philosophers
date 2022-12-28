@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 10:57:17 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/27 17:48:13 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/28 14:05:55 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	wait_for_death(t_data *data)
 		i = 0;
 		full = 0;
 		if (data->total_num_philos == 1)
-			return (my_msleep(data->time_to_die), die(data, 0), 1);
+			return (my_msleep(data->time_to_die, data), die(data, 0), 1);
 		while (i < data->total_num_philos)
 		{
 			if (is_dead(data, i))

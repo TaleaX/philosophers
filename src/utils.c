@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:30 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/27 17:47:07 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/28 14:06:56 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ long long	get_current_millis(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	my_msleep(long long milli_sec)
+void	my_msleep(long long milli_sec, t_data *data)
 {
 	long long	end;
 
 	end = get_current_millis() + milli_sec;
-	while (get_current_millis() < end)
+	while (get_current_millis() < end && is_alive(data))
 		usleep(500);
 }
 

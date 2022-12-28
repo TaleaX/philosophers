@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:11 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/27 17:45:52 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/28 14:05:08 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,18 @@ static t_philo_data	*init_philo_data(int len, t_data *data)
 
 void	init_data(t_data *data, char **argv, int argc)
 {
-	data->total_num_philos = atoi(argv[1]);
-	data->time_to_die = atoi(argv[2]);
-	data->time_to_eat = atoi(argv[3]);
-	data->time_to_sleep = atoi(argv[4]);
+	data->total_num_philos = (int)ft_atoi(argv[1]);
+	data->time_to_die = (int)ft_atoi(argv[2]);
+	data->time_to_eat = (int)ft_atoi(argv[3]);
+	data->time_to_sleep = (int)ft_atoi(argv[4]);
 	data->alive = TRUE;
 	data->threads_start = FALSE;
-	data->forks = create_forks(atoi(argv[1]));
+	data->forks = create_forks((int)ft_atoi(argv[1]));
 	pthread_mutex_init(&data->mutex_write, NULL);
 	pthread_mutex_init(&data->mutex_alive, NULL);
 	data->min_times_eaten = -1;
 	if (argc > 5)
-		data->min_times_eaten = atoi(argv[5]);
+		data->min_times_eaten = (int)ft_atoi(argv[5]);
 	data->philos = init_philo_data(data->total_num_philos, data);
 }
 
@@ -80,10 +80,8 @@ void	init_routine(t_philo_data *philo)
 	pthread_mutex_lock(&philo->mutex_last_eaten);
 	philo->last_eaten = get_current_millis();
 	pthread_mutex_unlock(&philo->mutex_last_eaten);
-	if (philo->data->total_num_philos > 1)
-		output(philo, THINK_STR);
 	if (philo->num % 2 != 0)
-		my_msleep(philo->data->time_to_eat);
+		my_msleep(philo->data->time_to_eat, philo->data);
 }
 
 t_bool	check_input(char **argv, int argc)
