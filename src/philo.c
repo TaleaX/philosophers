@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:20 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/28 14:04:59 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/30 16:00:27 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
-	if (argv[1] && ft_atoi(argv[1]) <= 0)
-		printf("The number of Philos you entered is 0 or smaller, try again\n");
-	else if (check_input(argv, argc))
+	if (check_input(argv, argc))
 	{
 		init_data(&data, argv, argc);
 		i = 0;
@@ -53,12 +51,12 @@ int	main(int argc, char **argv)
 				(void *)&data.philos[i]);
 			i++;
 		}
-		data.threads_start = TRUE;
 		wait_for_death(&data);
 		my_exit(&data);
 	}
 	else
-		printf("Args: number_of_philosophers time_to_die time_to_eat" \
-			"time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
+		printf("Args: number_of_philosophers[>0] time_to_die[>0] " \
+				"time_to_eat[>0] time_to_sleep[>0] " \
+				"[number_of_times_each_philosopher_must_eat][>0]\n");
 	return (EXIT_SUCCESS);
 }

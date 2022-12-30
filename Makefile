@@ -6,12 +6,12 @@
 #    By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 12:22:31 by tdehne            #+#    #+#              #
-#    Updated: 2022/12/21 09:42:47 by tdehne           ###   ########.fr        #
+#    Updated: 2022/12/30 16:01:56 by tdehne           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			=	gcc
-CFLAGS		=	-pthread#-Werror -Wextra -Wall# -fsanitize=thread -g
+CFLAGS		=	-pthread -Werror -Wextra -Wall #-fsanitize=address -g
 
 BOLD	= \033[1m
 BLACK	= \033[30;1m

@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:21:11 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/28 14:05:08 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/30 16:01:00 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	init_data(t_data *data, char **argv, int argc)
 	data->time_to_eat = (int)ft_atoi(argv[3]);
 	data->time_to_sleep = (int)ft_atoi(argv[4]);
 	data->alive = TRUE;
-	data->threads_start = FALSE;
 	data->forks = create_forks((int)ft_atoi(argv[1]));
 	pthread_mutex_init(&data->mutex_write, NULL);
 	pthread_mutex_init(&data->mutex_alive, NULL);
@@ -87,6 +86,9 @@ void	init_routine(t_philo_data *philo)
 t_bool	check_input(char **argv, int argc)
 {
 	if (argc < 5 || argc > 6)
+		return (FALSE);
+	if (ft_atoi(argv[1]) <= 0 || ft_atoi(argv[2]) <= 0 || ft_atoi(argv[3]) <= 0
+		|| ft_atoi(argv[4]) <= 0 || (argc == 6 && ft_atoi(argv[5]) <= 0))
 		return (FALSE);
 	while (--argc > 0)
 	{
