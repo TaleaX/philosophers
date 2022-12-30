@@ -6,7 +6,7 @@
 /*   By: tdehne <tdehne@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 12:22:22 by tdehne            #+#    #+#             */
-/*   Updated: 2022/12/28 14:06:10 by tdehne           ###   ########.fr       */
+/*   Updated: 2022/12/30 16:00:47 by tdehne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_data {
 	int				total_num_philos;
 	int				min_times_eaten;
 	t_bool			alive;
-	t_bool			threads_start;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	mutex_alive;
 	pthread_mutex_t	mutex_write;
